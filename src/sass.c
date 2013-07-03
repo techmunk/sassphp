@@ -43,7 +43,7 @@ PHP_METHOD(Sass, parse)
 
 	// "Hand over the source, buddy!"
 	// "Which one, béchamel or arrabbiata?"
-	context->input_string = source;
+	context->source_string = source;
 
 	// Compile it!
 	sass_compile(context);
