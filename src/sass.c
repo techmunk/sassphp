@@ -197,6 +197,38 @@ PHP_METHOD(Sass, compile_file)
 	sass_free_file_context(context);
 }
 
+PHP_METHOD(Sass, getIncludePath)
+{
+    zval *this = getThis();
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "", NULL) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    if (obj->include_paths == NULL) RETURN_STRING("", 1)
+    RETURN_STRING(obj->include_paths, 1)
+}
+
+PHP_METHOD(Sass, setIncludePath)
+{
+    zval *this = getThis();
+
+    char *path;
+    int path_len;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len) == FAILURE)
+        RETURN_NULL();
+
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    if (obj->include_paths != NULL)
+        efree(obj->include_paths);
+    obj->include_paths = path;
+
+    RETURN_NULL();
+}
+
+
 /* --------------------------------------------------------------
  * EXCEPTION HANDLING
  * ------------------------------------------------------------ */
@@ -211,9 +243,12 @@ zend_class_entry *sass_get_exception_base()
  * ------------------------------------------------------------ */
 
 zend_function_entry sass_methods[] = {
-    PHP_ME(Sass,  __construct,   NULL,  ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
-    PHP_ME(Sass,  compile,       NULL,  ZEND_ACC_PUBLIC)
-    PHP_ME(Sass,  compile_file,  NULL,  ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  __construct,     NULL,  ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME(Sass,  compile,         NULL,  ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  compile_file,    NULL,  ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  getIncludePath,  NULL,  ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  setIncludePath,  NULL,  ZEND_ACC_PUBLIC)
+
     {NULL, NULL, NULL}
 };
 
