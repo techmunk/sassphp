@@ -13,7 +13,7 @@
 #include "config.h"
 #endif
 
-#define SASS_VERSION "0.1.0"
+#define SASS_VERSION "0.2.0-beta"
 #define SASS_FLAVOR  "sensational"
 
 #include <php.h>
