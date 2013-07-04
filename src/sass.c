@@ -275,6 +275,8 @@ static PHP_MINIT_FUNCTION(sass)
     REGISTER_SASS_CLASS_CONST_LONG(STYLE_COMPACT, SASS_STYLE_COMPACT);
     REGISTER_SASS_CLASS_CONST_LONG(STYLE_COMPRESSED, SASS_STYLE_COMPRESSED);
 
+    REGISTER_STRING_CONSTANT("SASS_FLAVOR", SASS_FLAVOR, CONST_CS | CONST_PERSISTENT);
+
 	return SUCCESS;
 }
 
@@ -283,6 +285,7 @@ static PHP_MINFO_FUNCTION(sass)
 	php_info_print_table_start();
 	php_info_print_table_row(2, "sass support", "enabled");
 	php_info_print_table_row(2, "version", SASS_VERSION);
+    php_info_print_table_row(2, "flavor", SASS_FLAVOR);
 	php_info_print_table_end();
 }
 
