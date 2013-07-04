@@ -224,7 +224,7 @@ PHP_METHOD(Sass, setIncludePath)
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     if (obj->include_paths != NULL)
         efree(obj->include_paths);
-    obj->include_paths = path;
+    obj->include_paths = estrndup(path, path_len);
 
     RETURN_NULL();
 }
@@ -255,7 +255,7 @@ PHP_METHOD(Sass, setImagePath)
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     if (obj->image_path != NULL)
         efree(obj->image_path);
-    obj->image_path = path;
+    obj->image_path = estrndup(path, path_len);
 
     RETURN_NULL();
 }
