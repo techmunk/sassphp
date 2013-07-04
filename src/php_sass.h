@@ -27,7 +27,7 @@ zend_class_entry *sass_exception_ce;
 
 zend_class_entry *sass_get_exception_base();
 
-PHP_METHOD(Sass, parse);
-PHP_METHOD(Sass, parse_file);
+PHP_METHOD(Sass, compile);
+PHP_METHOD(Sass, compile_file);
 
 #endif

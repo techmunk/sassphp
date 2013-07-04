@@ -15,31 +15,93 @@
  * Sass
  * ------------------------------------------------------------ */
 
+zend_object_handlers sass_handlers;
+
+typedef struct sass_object {
+    zend_object zo;
+    int style;
+    char* include_paths;
+    char* image_path;
+} sass_object;
+
+zend_class_entry *sass_ce;
+
+void sass_free_storage(void *object TSRMLS_DC)
+{
+    sass_object *obj = (sass_object *)object;
+    if (obj->include_paths != NULL)
+        efree(obj->include_paths);
+    if (obj->image_path != NULL)
+        efree(obj->image_path);
+
+    zend_hash_destroy(obj->zo.properties);
+    FREE_HASHTABLE(obj->zo.properties);
+
+    efree(obj);
+}
+
+zend_object_value sass_create_handler(zend_class_entry *type TSRMLS_DC)
+{
+    zval *tmp;
+    zend_object_value retval;
+
+    sass_object *obj = (sass_object *)emalloc(sizeof(sass_object));
+    memset(obj, 0, sizeof(sass_object));
+
+    obj->zo.ce = type;
+
+    ALLOC_HASHTABLE(obj->zo.properties);
+    zend_hash_init(obj->zo.properties, 0, NULL, ZVAL_PTR_DTOR, 0);
+    object_properties_init(&(obj->zo), type);
+
+    retval.handle = zend_objects_store_put(obj, NULL,
+        sass_free_storage, NULL TSRMLS_CC);
+    retval.handlers = &sass_handlers;
+
+    return retval;
+}
+
+
+PHP_METHOD(Sass, __construct)
+{
+	zval *this = getThis();
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "", NULL) == FAILURE) {
+        RETURN_NULL();
+    }
+
+	sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+	obj->style = SASS_STYLE_NESTED;
+	obj->include_paths = NULL;
+	obj->image_path = NULL;
+
+}
+
 /**
  * $sass->parse(string $source, [  ]);
  *
  * Parse a string of Sass; a basic input -> output affair.
  */
-PHP_METHOD(Sass, parse)
+PHP_METHOD(Sass, compile)
 {
+
+	sass_object *this = (sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
 	// Define our parameters as local variables
 	char *source;
 	int source_len;
-	int style = SASS_STYLE_NESTED;
 
 	// Use zend_parse_parameters() to grab our source from the function call
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|l", &source, &source_len, &style) == FAILURE)
-	{
-		return;
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &source, &source_len) == FAILURE){
+		RETURN_NULL();
 	}
 
 	// Create a new sass_context
 	struct sass_context* context = sass_new_context();
-	
-	// We're not including anything and for the time being we only want to support
-	// the nested style of output and not compressed.
-	context->options.include_paths = "";
-	context->options.output_style = style;
+
+	context->options.include_paths = this->include_paths != NULL ? this->include_paths : "";
+	context->options.image_path = this->include_paths != NULL ? this->image_path : "";
+	context->options.output_style = this->style;
 
 	// "Hand over the source, buddy!"
 	// "Which one, béchamel or arrabbiata?"
@@ -64,7 +126,7 @@ PHP_METHOD(Sass, parse)
 	// There's been a major issue
 	else
 	{
-		// unknown internal error... throw an exception?
+		zend_throw_exception(sass_exception_ce, "Unknown Error", 0 TSRMLS_CC);
 	}
 
 	// Over and out.
@@ -76,17 +138,18 @@ PHP_METHOD(Sass, parse)
  *
  * Parse a whole file FULL of Sass and return the CSS output
  */
-PHP_METHOD(Sass, parse_file)
+PHP_METHOD(Sass, compile_file)
 {
+	sass_object *this = (sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+
 	// We need a file name and a length
 	char *file;
 	int file_len;
-	int style = SASS_STYLE_NESTED;
 
 	// Grab the file name from the function
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s|l", &file, &file_len, &style) == FAILURE)
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &file, &file_len) == FAILURE)
 	{
-		return;
+		RETURN_NULL();
 	}
 
 	// First, do a little checking of our own. Does the file exist?
@@ -101,12 +164,11 @@ PHP_METHOD(Sass, parse_file)
 
 	// Create a new sass_file_context
 	struct sass_file_context* context = sass_new_file_context();
-	
-	// Default options
-	context->options.include_paths = "";
-	context->options.output_style = style;
 
-	// File time
+	context->options.include_paths = this->include_paths != NULL ? this->include_paths : "";
+	context->options.image_path = this->include_paths != NULL ? this->image_path : "";
+	context->options.output_style = this->style;
+
 	context->input_path = file;
 
 	// Compile it!
@@ -128,7 +190,7 @@ PHP_METHOD(Sass, parse_file)
 	// There's been a major issue
 	else
 	{
-		// unknown internal error... throw an exception?
+		zend_throw_exception(sass_exception_ce, "Unknown Error", 0 TSRMLS_CC);
 	}
 
 	// Over and out.
@@ -149,8 +211,9 @@ zend_class_entry *sass_get_exception_base()
  * ------------------------------------------------------------ */
 
 zend_function_entry sass_methods[] = {
-    PHP_ME(Sass,  parse,     NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
-    PHP_ME(Sass,  parse_file,     NULL, ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
+    PHP_ME(Sass,  __construct,   NULL,  ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+    PHP_ME(Sass,  compile,       NULL,  ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  compile_file,  NULL,  ZEND_ACC_PUBLIC)
     {NULL, NULL, NULL}
 };
 
@@ -160,7 +223,13 @@ static PHP_MINIT_FUNCTION(sass)
 	zend_class_entry exception_ce;
 
 	INIT_CLASS_ENTRY(ce, "Sass", sass_methods);
+
 	sass_ce = zend_register_internal_class(&ce TSRMLS_CC);
+	sass_ce->create_object = sass_create_handler;
+
+	memcpy(&sass_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+	sass_handlers.clone_obj = NULL;
+
 	INIT_CLASS_ENTRY(exception_ce, "SassException", NULL);
     sass_exception_ce = zend_register_internal_class_ex(&exception_ce, sass_get_exception_base(), NULL TSRMLS_CC);
 
