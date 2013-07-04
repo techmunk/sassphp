@@ -3,9 +3,10 @@ parse() parses correct Sass
 --SKIPIF--
 <?php if (!extension_loaded("sass")) print "skip"; ?>
 --FILE--
-<?php 
+<?php
 
-$css = Sass::parse('
+$sass = new Sass();
+$css = $sass->compile('
 
 table.hl {
   margin: 2em 0;

@@ -6,5 +6,6 @@ div {
 
 $foo: iphone;
 
-@import url("hello.css");
-@import url("blah-#{$foo}.css");
+div {
+    blah: "foo #{$foo}"
+}

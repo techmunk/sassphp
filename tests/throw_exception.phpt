@@ -5,9 +5,10 @@ If there's an error while parsing, throw a SassException
 --FILE--
 <?php
 
+$sass = new Sass();
 try
 {
-    Sass::parse('askdgauwydv7iq2dq');
+    $sass->compile('askdgauwydv7iq2dq');
 }
 catch (SassException $e)
 {
