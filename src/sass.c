@@ -1,7 +1,7 @@
 /**
  * Sass
  * PHP bindings to libsass - fast, native Sass parsing in PHP!
- * 
+ *
  * https://github.com/jamierumbelow/sassphp
  * Copyright (c)2012 Jamie Rumbelow <http://jamierumbelow.net>
  */
@@ -61,19 +61,18 @@ zend_object_value sass_create_handler(zend_class_entry *type TSRMLS_DC)
     return retval;
 }
 
-
 PHP_METHOD(Sass, __construct)
 {
-	zval *this = getThis();
+    zval *this = getThis();
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "", NULL) == FAILURE) {
         RETURN_NULL();
     }
 
-	sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
-	obj->style = SASS_STYLE_NESTED;
-	obj->include_paths = NULL;
-	obj->image_path = NULL;
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    obj->style = SASS_STYLE_NESTED;
+    obj->include_paths = NULL;
+    obj->image_path = NULL;
 
 }
 
@@ -85,52 +84,52 @@ PHP_METHOD(Sass, __construct)
 PHP_METHOD(Sass, compile)
 {
 
-	sass_object *this = (sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+    sass_object *this = (sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	// Define our parameters as local variables
-	char *source;
-	int source_len;
+    // Define our parameters as local variables
+    char *source;
+    int source_len;
 
-	// Use zend_parse_parameters() to grab our source from the function call
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &source, &source_len) == FAILURE){
+    // Use zend_parse_parameters() to grab our source from the function call
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &source, &source_len) == FAILURE){
         RETURN_FALSE;
-	}
+    }
 
-	// Create a new sass_context
-	struct sass_context* context = sass_new_context();
+    // Create a new sass_context
+    struct sass_context* context = sass_new_context();
 
-	context->options.include_paths = this->include_paths != NULL ? this->include_paths : "";
-	context->options.image_path = this->include_paths != NULL ? this->image_path : "";
-	context->options.output_style = this->style;
+    context->options.include_paths = this->include_paths != NULL ? this->include_paths : "";
+    context->options.image_path = this->include_paths != NULL ? this->image_path : "";
+    context->options.output_style = this->style;
 
-	// "Hand over the source, buddy!"
-	// "Which one, béchamel or arrabbiata?"
-	context->source_string = source;
+    // "Hand over the source, buddy!"
+    // "Which one, béchamel or arrabbiata?"
+    context->source_string = source;
 
-	// Compile it!
-	sass_compile(context);
+    // Compile it!
+    sass_compile(context);
 
-	// Check the context for any errors...
-	if (context->error_status)
-	{
-		zend_throw_exception(sass_exception_ce, trim(context->error_message), 0 TSRMLS_CC);
-	}
+    // Check the context for any errors...
+    if (context->error_status)
+    {
+        zend_throw_exception(sass_exception_ce, trim(context->error_message), 0 TSRMLS_CC);
+    }
 
-	// Do we have an output?
-	else if (context->output_string)
-	{
-		// Send it over to PHP.
-		RETURN_STRING(context->output_string, 1);
-	}
+    // Do we have an output?
+    else if (context->output_string)
+    {
+        // Send it over to PHP.
+        RETURN_STRING(context->output_string, 1);
+    }
 
-	// There's been a major issue
-	else
-	{
-		zend_throw_exception(sass_exception_ce, "Unknown Error", 0 TSRMLS_CC);
-	}
+    // There's been a major issue
+    else
+    {
+        zend_throw_exception(sass_exception_ce, "Unknown Error", 0 TSRMLS_CC);
+    }
 
-	// Over and out.
-	sass_free_context(context);
+    // Over and out.
+    sass_free_context(context);
 }
 
 /**
@@ -140,61 +139,61 @@ PHP_METHOD(Sass, compile)
  */
 PHP_METHOD(Sass, compile_file)
 {
-	sass_object *this = (sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+    sass_object *this = (sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
-	// We need a file name and a length
-	char *file;
-	int file_len;
+    // We need a file name and a length
+    char *file;
+    int file_len;
 
-	// Grab the file name from the function
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &file, &file_len) == FAILURE)
-	{
+    // Grab the file name from the function
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &file, &file_len) == FAILURE)
+    {
         RETURN_FALSE;
-	}
+    }
 
-	// First, do a little checking of our own. Does the file exist?
-	if( access( file, F_OK ) == -1 )
-	{
-		char err[200];
-		sprintf(err, "File %s could not be found", file);
+    // First, do a little checking of our own. Does the file exist?
+    if( access( file, F_OK ) == -1 )
+    {
+        char err[200];
+        sprintf(err, "File %s could not be found", file);
 
-		zend_throw_exception(sass_exception_ce, err, 0 TSRMLS_CC);
-		return;
-	}
+        zend_throw_exception(sass_exception_ce, err, 0 TSRMLS_CC);
+        return;
+    }
 
-	// Create a new sass_file_context
-	struct sass_file_context* context = sass_new_file_context();
+    // Create a new sass_file_context
+    struct sass_file_context* context = sass_new_file_context();
 
-	context->options.include_paths = this->include_paths != NULL ? this->include_paths : "";
-	context->options.image_path = this->include_paths != NULL ? this->image_path : "";
-	context->options.output_style = this->style;
+    context->options.include_paths = this->include_paths != NULL ? this->include_paths : "";
+    context->options.image_path = this->include_paths != NULL ? this->image_path : "";
+    context->options.output_style = this->style;
 
-	context->input_path = file;
+    context->input_path = file;
 
-	// Compile it!
-	sass_compile_file(context);
+    // Compile it!
+    sass_compile_file(context);
 
-	// Check the context for any errors...
-	if (context->error_status)
-	{
-		zend_throw_exception(sass_exception_ce, trim(context->error_message), 0 TSRMLS_CC);
-	}
+    // Check the context for any errors...
+    if (context->error_status)
+    {
+        zend_throw_exception(sass_exception_ce, trim(context->error_message), 0 TSRMLS_CC);
+    }
 
-	// Do we have an output?
-	else if (context->output_string)
-	{
-		// Send it over to PHP.
-		RETURN_STRING(context->output_string, 1);
-	}
+    // Do we have an output?
+    else if (context->output_string)
+    {
+        // Send it over to PHP.
+        RETURN_STRING(context->output_string, 1);
+    }
 
-	// There's been a major issue
-	else
-	{
-		zend_throw_exception(sass_exception_ce, "Unknown Error", 0 TSRMLS_CC);
-	}
+    // There's been a major issue
+    else
+    {
+        zend_throw_exception(sass_exception_ce, "Unknown Error", 0 TSRMLS_CC);
+    }
 
-	// Over and out.
-	sass_free_file_context(context);
+    // Over and out.
+    sass_free_file_context(context);
 }
 
 PHP_METHOD(Sass, getIncludePath)
@@ -287,21 +286,21 @@ zend_function_entry sass_methods[] = {
 
 static PHP_MINIT_FUNCTION(sass)
 {
-	zend_class_entry ce;
-	zend_class_entry exception_ce;
+    zend_class_entry ce;
+    zend_class_entry exception_ce;
 
-	INIT_CLASS_ENTRY(ce, "Sass", sass_methods);
+    INIT_CLASS_ENTRY(ce, "Sass", sass_methods);
 
-	sass_ce = zend_register_internal_class(&ce TSRMLS_CC);
-	sass_ce->create_object = sass_create_handler;
+    sass_ce = zend_register_internal_class(&ce TSRMLS_CC);
+    sass_ce->create_object = sass_create_handler;
 
-	memcpy(&sass_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
-	sass_handlers.clone_obj = NULL;
+    memcpy(&sass_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+    sass_handlers.clone_obj = NULL;
 
-	INIT_CLASS_ENTRY(exception_ce, "SassException", NULL);
+    INIT_CLASS_ENTRY(exception_ce, "SassException", NULL);
     sass_exception_ce = zend_register_internal_class_ex(&exception_ce, sass_get_exception_base(), NULL TSRMLS_CC);
 
-	#define REGISTER_SASS_CLASS_CONST_LONG(name, value) zend_declare_class_constant_long(sass_ce, ZEND_STRS( #name ) - 1, value TSRMLS_CC)
+    #define REGISTER_SASS_CLASS_CONST_LONG(name, value) zend_declare_class_constant_long(sass_ce, ZEND_STRS( #name ) - 1, value TSRMLS_CC)
 
     REGISTER_SASS_CLASS_CONST_LONG(STYLE_NESTED, SASS_STYLE_NESTED);
     REGISTER_SASS_CLASS_CONST_LONG(STYLE_EXPANDED, SASS_STYLE_EXPANDED);
@@ -310,29 +309,29 @@ static PHP_MINIT_FUNCTION(sass)
 
     REGISTER_STRING_CONSTANT("SASS_FLAVOR", SASS_FLAVOR, CONST_CS | CONST_PERSISTENT);
 
-	return SUCCESS;
+    return SUCCESS;
 }
 
 static PHP_MINFO_FUNCTION(sass)
 {
-	php_info_print_table_start();
-	php_info_print_table_row(2, "sass support", "enabled");
-	php_info_print_table_row(2, "version", SASS_VERSION);
+    php_info_print_table_start();
+    php_info_print_table_row(2, "sass support", "enabled");
+    php_info_print_table_row(2, "version", SASS_VERSION);
     php_info_print_table_row(2, "flavor", SASS_FLAVOR);
-	php_info_print_table_end();
+    php_info_print_table_end();
 }
 
 static zend_module_entry sass_module_entry = {
-	STANDARD_MODULE_HEADER,
-	"sass",
-	NULL,
-	PHP_MINIT(sass),
-	NULL,
-	NULL,
-	NULL,
-	PHP_MINFO(sass),
-	SASS_VERSION,
-	STANDARD_MODULE_PROPERTIES
+    STANDARD_MODULE_HEADER,
+    "sass",
+    NULL,
+    PHP_MINIT(sass),
+    NULL,
+    NULL,
+    NULL,
+    PHP_MINFO(sass),
+    SASS_VERSION,
+    STANDARD_MODULE_PROPERTIES
 };
 
 #ifdef COMPILE_DL_SASS
