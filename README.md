@@ -14,7 +14,7 @@ For more information about Sass itself, please visit [http://sass-lang.com](http
 
 Currently, the only way to install the extension is manually:
 
-	$ git clone git://github.com/jamierumbelow/sassphp
+	$ git clone git://github.com/sensational/sassphp
 
 Remember to grab your submodules:
 
@@ -41,17 +41,27 @@ And then add it to your _php.ini_:
 
 This extension has a very simple API:
 
-	$css = Sass::parse($source);
+    $sass = new Sass();
+	$css = $sass->compile($source);
 
-You can parse a file with `parse_file()`:
+You can compile a file with `compile_file()`:
 
-	$css = Sass::parse_file('path_to_file.scss');
+    $sass = new Sass();
+    $css = $sass->compile_file($source);
+
+You can set the include path for the library to use:
+
+    $sass = new Sass();
+    $sass->setIncludePath('/tmp');
+    $css = $sass->compile($source);
 
 If there's a problem, the extension will throw a `SassException`:
 
+    $sass = new Sass();
+
     try
     {
-        $css = Sass::parse('dayrui3dui36di37');
+        $css = $sass->compile('dayrui3dui36di37');
     }
     catch (SassException $e)
     {
@@ -61,6 +71,10 @@ If there's a problem, the extension will throw a `SassException`:
     }
 
 ## Changelog
+
+** Version 0.2.0**
+* Changed methods to be non-static
+* Allow setting include-path and image-path
 
 **Version 0.1.0 - IN DEVELOPMENT**
 * Initial release
