@@ -93,7 +93,7 @@ PHP_METHOD(Sass, compile)
 
 	// Use zend_parse_parameters() to grab our source from the function call
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &source, &source_len) == FAILURE){
-		RETURN_NULL();
+        RETURN_FALSE;
 	}
 
 	// Create a new sass_context
@@ -149,7 +149,7 @@ PHP_METHOD(Sass, compile_file)
 	// Grab the file name from the function
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &file, &file_len) == FAILURE)
 	{
-		RETURN_NULL();
+        RETURN_FALSE;
 	}
 
 	// First, do a little checking of our own. Does the file exist?
@@ -202,7 +202,7 @@ PHP_METHOD(Sass, getIncludePath)
     zval *this = getThis();
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "", NULL) == FAILURE) {
-        RETURN_NULL();
+        RETURN_FALSE;
     }
 
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
@@ -218,7 +218,7 @@ PHP_METHOD(Sass, setIncludePath)
     int path_len;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len) == FAILURE)
-        RETURN_NULL();
+        RETURN_FALSE;
 
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     if (obj->include_paths != NULL)
