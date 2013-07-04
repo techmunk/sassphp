@@ -228,6 +228,37 @@ PHP_METHOD(Sass, setIncludePath)
     RETURN_NULL();
 }
 
+PHP_METHOD(Sass, getImagePath)
+{
+    zval *this = getThis();
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "", NULL) == FAILURE) {
+        RETURN_FALSE;
+    }
+
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    if (obj->image_path == NULL) RETURN_STRING("", 1)
+    RETURN_STRING(obj->image_path, 1)
+}
+
+PHP_METHOD(Sass, setImagePath)
+{
+    zval *this = getThis();
+
+    char *path;
+    int path_len;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len) == FAILURE)
+        RETURN_FALSE;
+
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    if (obj->image_path != NULL)
+        efree(obj->image_path);
+    obj->image_path = path;
+
+    RETURN_NULL();
+}
+
 
 /* --------------------------------------------------------------
  * EXCEPTION HANDLING
@@ -248,9 +279,11 @@ zend_function_entry sass_methods[] = {
     PHP_ME(Sass,  compile_file,    NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getIncludePath,  NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  setIncludePath,  NULL,  ZEND_ACC_PUBLIC)
-
+    PHP_ME(Sass,  getImagePath,    NULL,  ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  setImagePath,    NULL,  ZEND_ACC_PUBLIC)
     {NULL, NULL, NULL}
 };
+
 
 static PHP_MINIT_FUNCTION(sass)
 {
