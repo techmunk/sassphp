@@ -21,6 +21,8 @@ Remember to grab your submodules:
 	$ git submodule init
 	$ git submodule update
 
+Also remember that libsass now uses submodules on its own, so update those too.
+
 ...and compile it! I've written a little PHP script to do all the stuff you need to do:
 
 	$ php install.php
