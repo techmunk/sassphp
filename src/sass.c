@@ -54,7 +54,9 @@ zend_object_value sass_create_handler(zend_class_entry *type TSRMLS_DC)
 
     ALLOC_HASHTABLE(obj->zo.properties);
     zend_hash_init(obj->zo.properties, 0, NULL, ZVAL_PTR_DTOR, 0);
+#if PHP_VERSION_ID > 50399
     object_properties_init(&(obj->zo), type);
+#endif
 
     retval.handle = zend_objects_store_put(obj, NULL,
         sass_free_storage, NULL TSRMLS_CC);
