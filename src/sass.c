@@ -267,7 +267,7 @@ PHP_METHOD(Sass, setImagePath)
  * EXCEPTION HANDLING
  * ------------------------------------------------------------ */
 
-zend_class_entry *sass_get_exception_base()
+zend_class_entry *sass_get_exception_base(TSRMLS_D)
 {
     return zend_exception_get_default(TSRMLS_C);
 }
@@ -302,7 +302,7 @@ static PHP_MINIT_FUNCTION(sass)
     sass_handlers.clone_obj = NULL;
 
     INIT_CLASS_ENTRY(exception_ce, "SassException", NULL);
-    sass_exception_ce = zend_register_internal_class_ex(&exception_ce, sass_get_exception_base(), NULL TSRMLS_CC);
+    sass_exception_ce = zend_register_internal_class_ex(&exception_ce, sass_get_exception_base(TSRMLS_C), NULL TSRMLS_CC);
 
     #define REGISTER_SASS_CLASS_CONST_LONG(name, value) zend_declare_class_constant_long(sass_ce, ZEND_STRS( #name ) - 1, value TSRMLS_CC)
 
