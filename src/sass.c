@@ -200,6 +200,34 @@ PHP_METHOD(Sass, compile_file)
     sass_free_file_context(context);
 }
 
+PHP_METHOD(Sass, getStyle)
+{
+    zval *this = getThis();
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "", NULL) == FAILURE) {
+        RETURN_FALSE;
+    }
+
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    RETURN_LONG(obj->style);
+}
+
+PHP_METHOD(Sass, setStyle)
+{
+    zval *this = getThis();
+
+    long new_style;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &new_style) == FAILURE) {
+        RETURN_FALSE;
+    }
+
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    obj->style = new_style;
+
+    RETURN_NULL();
+}
+
 PHP_METHOD(Sass, getIncludePath)
 {
     zval *this = getThis();
@@ -280,6 +308,8 @@ zend_function_entry sass_methods[] = {
     PHP_ME(Sass,  __construct,     NULL,  ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     PHP_ME(Sass,  compile,         NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  compile_file,    NULL,  ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  getStyle,        NULL,  ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  setStyle,        NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getIncludePath,  NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  setIncludePath,  NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getImagePath,    NULL,  ZEND_ACC_PUBLIC)
@@ -310,6 +340,7 @@ static PHP_MINIT_FUNCTION(sass)
     REGISTER_SASS_CLASS_CONST_LONG(STYLE_EXPANDED, SASS_STYLE_EXPANDED);
     REGISTER_SASS_CLASS_CONST_LONG(STYLE_COMPACT, SASS_STYLE_COMPACT);
     REGISTER_SASS_CLASS_CONST_LONG(STYLE_COMPRESSED, SASS_STYLE_COMPRESSED);
+    REGISTER_SASS_CLASS_CONST_LONG(STYLE_FORMATTED, SASS_OUTPUT_FORMATTED);
 
     REGISTER_STRING_CONSTANT("SASS_FLAVOR", SASS_FLAVOR, CONST_CS | CONST_PERSISTENT);
 
