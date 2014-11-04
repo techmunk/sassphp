@@ -31,6 +31,8 @@ zend_class_entry *sass_get_exception_base();
 PHP_METHOD(Sass, __construct);
 PHP_METHOD(Sass, compile);
 PHP_METHOD(Sass, compile_file);
+PHP_METHOD(Sass, getStyle);
+PHP_METHOD(Sass, setStyle);
 PHP_METHOD(Sass, getIncludePath);
 PHP_METHOD(Sass, setIncludePath);
 PHP_METHOD(Sass, getImagePath);
