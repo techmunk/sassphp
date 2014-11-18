@@ -13,8 +13,8 @@
 #include "config.h"
 #endif
 
-#define SASS_VERSION "0.2.0-beta"
-#define SASS_FLAVOR  "sensational"
+#define SASS_VERSION "0.4.0-beta"
+#define SASS_FLAVOR  "sassyphpras"
 
 #include <php.h>
 #include <ext/standard/info.h>
@@ -33,9 +33,12 @@ PHP_METHOD(Sass, compile);
 PHP_METHOD(Sass, compile_file);
 PHP_METHOD(Sass, getStyle);
 PHP_METHOD(Sass, setStyle);
+PHP_METHOD(Sass, getComments);
+PHP_METHOD(Sass, setComments);
 PHP_METHOD(Sass, getIncludePath);
 PHP_METHOD(Sass, setIncludePath);
 PHP_METHOD(Sass, getImagePath);
 PHP_METHOD(Sass, setImagePath);
-
+PHP_METHOD(Sass, getMapPath);
+PHP_METHOD(Sass, setMapPath);
 #endif

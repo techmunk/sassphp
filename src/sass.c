@@ -22,8 +22,10 @@ zend_object_handlers sass_handlers;
 typedef struct sass_object {
     zend_object zo;
     int style;
+    int map;
     char* include_paths;
     char* image_path;
+    char* map_path;
 } sass_object;
 
 zend_class_entry *sass_ce;
@@ -35,6 +37,8 @@ void sass_free_storage(void *object TSRMLS_DC)
         efree(obj->include_paths);
     if (obj->image_path != NULL)
         efree(obj->image_path);
+     if (obj->map_path != NULL)
+        efree(obj->map_path);
 
     zend_hash_destroy(obj->zo.properties);
     FREE_HASHTABLE(obj->zo.properties);
@@ -75,8 +79,10 @@ PHP_METHOD(Sass, __construct)
 
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     obj->style = SASS_STYLE_NESTED;
+    obj->map = SASS_SOURCE_COMMENTS_NONE;
     obj->include_paths = NULL;
     obj->image_path = NULL;
+    obj->map_path = NULL;
 
 }
 
@@ -143,6 +149,7 @@ PHP_METHOD(Sass, compile)
  */
 PHP_METHOD(Sass, compile_file)
 {
+    array_init(return_value);
     sass_object *this = (sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
     // We need a file name and a length
@@ -172,6 +179,12 @@ PHP_METHOD(Sass, compile_file)
     context->options.image_path = this->include_paths != NULL ? this->image_path : "";
     context->options.output_style = this->style;
 
+    context->options.source_comments = this->map;
+    if (this->map_path != NULL ) {
+    context->omit_source_map_url = false;
+    context->source_map_file = this->map_path;
+    }
+
     context->input_path = file;
 
     // Compile it!
@@ -187,8 +200,16 @@ PHP_METHOD(Sass, compile_file)
     else if (context->output_string)
     {
         // Send it over to PHP.
-        RETURN_STRING(context->output_string, 1);
+        add_next_index_string(return_value, context->output_string, 1);
     }
+
+    // Do we have source maps to go?
+    else if (this->map_path != NULL)
+    {
+        // Send it over to PHP.
+        add_next_index_string(return_value, context->source_map_string, 1);
+    }
+
 
     // There's been a major issue
     else
@@ -199,6 +220,7 @@ PHP_METHOD(Sass, compile_file)
     // Over and out.
     sass_free_file_context(context);
 }
+
 
 PHP_METHOD(Sass, getStyle)
 {
@@ -226,6 +248,34 @@ PHP_METHOD(Sass, setStyle)
     obj->style = new_style;
 
     RETURN_NULL();
+}
+
+PHP_METHOD(Sass, setComments)
+{
+    zval *this = getThis();
+
+    long new_map;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &new_map) == FAILURE) {
+        RETURN_FALSE;
+    }
+
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    obj->map = new_map;
+
+    RETURN_NULL();
+}
+
+PHP_METHOD(Sass, getComments)
+{
+    zval *this = getThis();
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "", NULL) == FAILURE) {
+        RETURN_FALSE;
+    }
+
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    RETURN_LONG(obj->map);
 }
 
 PHP_METHOD(Sass, getIncludePath)
@@ -259,6 +309,7 @@ PHP_METHOD(Sass, setIncludePath)
     RETURN_NULL();
 }
 
+
 PHP_METHOD(Sass, getImagePath)
 {
     zval *this = getThis();
@@ -290,6 +341,38 @@ PHP_METHOD(Sass, setImagePath)
     RETURN_NULL();
 }
 
+PHP_METHOD(Sass, getMapPath)
+{
+    zval *this = getThis();
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "", NULL) == FAILURE) {
+        RETURN_FALSE;
+    }
+
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    if (obj->map_path == NULL) RETURN_STRING("", 1)
+    RETURN_STRING(obj->map_path, 1)
+}
+
+PHP_METHOD(Sass, setMapPath)
+{
+    zval *this = getThis();
+
+    char *path;
+    int path_len;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len) == FAILURE)
+        RETURN_FALSE;
+
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    if (obj->map_path != NULL)
+        efree(obj->map_path);
+    obj->map_path = estrndup(path, path_len);
+
+    RETURN_NULL();
+}
+
+
 
 /* --------------------------------------------------------------
  * EXCEPTION HANDLING
@@ -310,10 +393,14 @@ zend_function_entry sass_methods[] = {
     PHP_ME(Sass,  compile_file,    NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getStyle,        NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  setStyle,        NULL,  ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  getComments,     NULL,  ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  setComments,     NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getIncludePath,  NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  setIncludePath,  NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getImagePath,    NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  setImagePath,    NULL,  ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  getMapPath,      NULL,  ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  setMapPath,      NULL,  ZEND_ACC_PUBLIC)
     {NULL, NULL, NULL}
 };
 
@@ -341,8 +428,14 @@ static PHP_MINIT_FUNCTION(sass)
     REGISTER_SASS_CLASS_CONST_LONG(STYLE_COMPACT, SASS_STYLE_COMPACT);
     REGISTER_SASS_CLASS_CONST_LONG(STYLE_COMPRESSED, SASS_STYLE_COMPRESSED);
     REGISTER_SASS_CLASS_CONST_LONG(STYLE_FORMATTED, SASS_OUTPUT_FORMATTED);
+    REGISTER_SASS_CLASS_CONST_LONG(SOURCE_NONE, SASS_SOURCE_COMMENTS_NONE);
+    REGISTER_SASS_CLASS_CONST_LONG(SOURCE_DEFAULT, SASS_SOURCE_COMMENTS_DEFAULT);
+    REGISTER_SASS_CLASS_CONST_LONG(SOURCE_MAP, SASS_SOURCE_COMMENTS_MAP);
+
+
 
     REGISTER_STRING_CONSTANT("SASS_FLAVOR", SASS_FLAVOR, CONST_CS | CONST_PERSISTENT);
+
 
     return SUCCESS;
 }

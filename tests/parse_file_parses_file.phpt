@@ -7,7 +7,7 @@ parse_file() parses correct Sass file
 
 $sass = new Sass();
 $css = $sass->compile_file('tests/support/test.scss');
-echo $css;
+echo $css[1];
 
 ?>
 --EXPECT--
