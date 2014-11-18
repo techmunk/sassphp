@@ -79,7 +79,7 @@ The new additions to this build from the [Sensational](https://github.com/sensat
 * The ability to define source comments
 * The ability to set a source map path, required when generating a dedicated .map file
 
-It also reports itself as the `Sassyphpras` version of the Apache SASS module when to help differentiate builds.
+It also reports itself as the `Sassyphpras` version of the Apache SASS module to help differentiate builds.
 
 The output of `compile_file()` is now an array instead of a string, allowing both compiled SASS file and .map file to be generated in the same function call. As there are multiple ways of generating source comments, there are now PHP level settings to control that output.
 
@@ -98,10 +98,10 @@ You can set the source map file for the library to use:
 
 This needs to be done prior to getting the output of the map file. As it stands, both the output of the SASS file compile & the SASS source map file generation sequence are both strings.
 
-The first array item will always be the compiled SASS file, so your PHP code should address this by calling:
+The first array item will always be the compiled SASS file:
     $css[0]
 
-The second array item will always be the source map output, so your PHP code should address this by calling:
+The second array item will always be the source map output:
     $css[1]
 
 If there's a problem, the extension will throw a `SassException`:
