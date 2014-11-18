@@ -14,11 +14,11 @@ $sass->setComments(Sass::SOURCE_NONE);
 echo $sass->getComments();
 
 // test SASS_SOURCE_DEFAULT
-$sass->setStyle(Sass::SOURCE_DEFAULT);
+$sass->setComments(Sass::SOURCE_DEFAULT);
 echo $sass->getComments();
 
 // test SASS_SOURCE_MAP
-$sass->setStyle(Sass::SOURCE_MAP);
+$sass->setComments(Sass::SOURCE_MAP);
 echo $sass->getComments();
 
 ?>
