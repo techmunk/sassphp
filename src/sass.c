@@ -203,18 +203,26 @@ PHP_METHOD(Sass, compile_file)
         add_next_index_string(return_value, context->output_string, 1);
     }
 
-    // Do we have source maps to go?
-    else if (this->map_path != NULL)
+    // There's been a major issue
+
+    else
+
     {
-        // Send it over to PHP.
-        add_next_index_string(return_value, context->source_map_string, 1);
+
+        zend_throw_exception(sass_exception_ce, "Unknown Error", 0 TSRMLS_CC);
+
     }
 
+    // Do we have source maps to go?
 
-    // There's been a major issue
-    else
+     if (this->map_path != NULL)
+
     {
-        zend_throw_exception(sass_exception_ce, "Unknown Error", 0 TSRMLS_CC);
+
+        // Send it over to PHP.
+
+        add_next_index_string(return_value, context->source_map_string, 1);
+
     }
 
     // Over and out.
