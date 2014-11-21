@@ -22,7 +22,7 @@ zend_object_handlers sass_handlers;
 typedef struct sass_object {
     zend_object zo;
     int style;
-    int map;
+	int map;
     char* include_paths;
     char* image_path;
     char* map_path;
@@ -79,7 +79,7 @@ PHP_METHOD(Sass, __construct)
 
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     obj->style = SASS_STYLE_NESTED;
-    obj->map = SASS_SOURCE_COMMENTS_NONE;
+	obj->map = SASS_SOURCE_COMMENTS_NONE;
     obj->include_paths = NULL;
     obj->image_path = NULL;
     obj->map_path = NULL;
@@ -199,31 +199,27 @@ PHP_METHOD(Sass, compile_file)
     // Do we have an output?
     else if (context->output_string)
     {
+        if (this->map_path != NULL ){
         // Send it over to PHP.
         add_next_index_string(return_value, context->output_string, 1);
+        } else {
+        RETURN_STRING(context->output_string, 1);
+        }
     }
 
     // There's been a major issue
-
     else
-
     {
-
         zend_throw_exception(sass_exception_ce, "Unknown Error", 0 TSRMLS_CC);
-
     }
 
     // Do we have source maps to go?
-
      if (this->map_path != NULL)
-
     {
-
         // Send it over to PHP.
-
         add_next_index_string(return_value, context->source_map_string, 1);
-
     }
+
 
     // Over and out.
     sass_free_file_context(context);
@@ -436,8 +432,8 @@ static PHP_MINIT_FUNCTION(sass)
     REGISTER_SASS_CLASS_CONST_LONG(STYLE_COMPACT, SASS_STYLE_COMPACT);
     REGISTER_SASS_CLASS_CONST_LONG(STYLE_COMPRESSED, SASS_STYLE_COMPRESSED);
     REGISTER_SASS_CLASS_CONST_LONG(STYLE_FORMATTED, SASS_OUTPUT_FORMATTED);
-    REGISTER_SASS_CLASS_CONST_LONG(SOURCE_NONE, SASS_SOURCE_COMMENTS_NONE);
-    REGISTER_SASS_CLASS_CONST_LONG(SOURCE_DEFAULT, SASS_SOURCE_COMMENTS_DEFAULT);
+	REGISTER_SASS_CLASS_CONST_LONG(SOURCE_NONE, SASS_SOURCE_COMMENTS_NONE);
+   	REGISTER_SASS_CLASS_CONST_LONG(SOURCE_DEFAULT, SASS_SOURCE_COMMENTS_DEFAULT);
     REGISTER_SASS_CLASS_CONST_LONG(SOURCE_MAP, SASS_SOURCE_COMMENTS_MAP);
 
 

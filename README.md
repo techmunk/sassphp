@@ -83,6 +83,12 @@ It also reports itself as the `Sassyphpras` version of the Apache SASS module to
 
 The output of `compile_file()` is now an array instead of a string, allowing both compiled SASS file and .map file to be generated in the same function call. As there are multiple ways of generating source comments, there are now PHP level settings to control that output.
 
+To generate source comments for a file inline:
+
+    $sass = new Sass();
+    $sass->setComments(Sass::SOURCE_DEFAULT);
+    $css = $sass->compile_file($source);
+
 You can set the source map file for the library to use:
 
     $sass = new Sass();
@@ -115,17 +121,20 @@ If there's a problem, the extension will throw a `SassException`:
 
 ## Potential / known issues
 
-* The sequence for SOURCE_DEFAULT is still failing & under investigation.  
-* In 0.3.9 / 0.4 testing setIncludePath was failing in included automated tests; still under investigation.
+* The file_comments test will fail as it remains unable to figure out the path the test has been run in. It generates the output successfully
 
 ## Changelog
+
+** Version 0.4.1**
+* SOURCE_DEFAULT works & is documented
+* PHP test for SOURCE_DEFAULT (output unable to understand source directory in test, so functional pass, technical fail)
+* Revise other tests to pass as output varies on source negotiation.
 
 ** Version 0.4**
 * Reconciled file compliation loop
 * Expand documentation
 * Addition of basic test for source comments
 * More work on compile sequence
-
 
 ** Version 0.3.9**
 * Addition of source map url paths to SASS file compilation
