@@ -4,7 +4,7 @@ PHP_ARG_ENABLE(sass, [whether to enable sass extension],
 if test "$PHP_SASS" != "no"; then
   PHP_ADD_LIBRARY_WITH_PATH(sass, lib/libexec, LIBSASS_SHARED_LIBADD)
 
-  LDFLAGS="-lsass -L"`pwd`"/lib/libsass/ -lstdc++"
+  LDFLAGS="-lsass -L"`pwd`"/lib/libsass/lib/ -lstdc++"
 
   PHP_NEW_EXTENSION(sass, src/sass.c src/utilities.c, $ext_shared)
 fi
