@@ -75,13 +75,14 @@ You can set the style of your SASS file to suit your needs:
     $sass->setStyle(Sass::STYLE_FORMATTED);
 
 The new additions to this build from the [Sensational](https://github.com/sensational/sassphp) codebase are:
-* The output of `compile_file()` is now an array
+* Camel case rename of `compile_file` to `compileFile`
+* SASS file compilation is now an array when a source map is enabled. Otherwise, as per normal, it's a string.
 * The ability to define source comments
 * The ability to set a source map path, required when generating a dedicated .map file
 
 It also reports itself as the `Sassyphpras` version of the Apache SASS module to help differentiate builds.
 
-The output of `compile_file()` is now an array instead of a string, allowing both compiled SASS file and .map file to be generated in the same function call. As there are multiple ways of generating source comments, there are now PHP level settings to control that output.
+The output of `compileFile()` is now an array instead of a string, allowing both compiled SASS file and .map file to be generated in the same function call. As there are multiple ways of generating source comments, there are now PHP level settings to control that output.
 
 To generate source comments for a file inline - now in camelCase:
 
