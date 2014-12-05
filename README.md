@@ -83,18 +83,18 @@ It also reports itself as the `Sassyphpras` version of the Apache SASS module to
 
 The output of `compile_file()` is now an array instead of a string, allowing both compiled SASS file and .map file to be generated in the same function call. As there are multiple ways of generating source comments, there are now PHP level settings to control that output.
 
-To generate source comments for a file inline:
+To generate source comments for a file inline - now in camelCase:
 
     $sass = new Sass();
     $sass->setComments(Sass::SOURCE_DEFAULT);
-    $css = $sass->compile_file($source);
+    $css = $sass->compileFile($source);
 
 You can set the source map file for the library to use:
 
     $sass = new Sass();
     $sass->setComments(Sass::SOURCE_MAP);
     $sass->setMapPath('/random.output.css.map');
-    $css = $sass->compile_file($source);
+    $css = $sass->compileFile($source);
 
 This needs to be done prior to getting the output of the map file. As it stands, both the output of the SASS file compile & the SASS source map file generation sequence are both strings.
 
@@ -124,6 +124,9 @@ If there's a problem, the extension will throw a `SassException`:
 * The file_comments test will fail as it remains unable to figure out the path the test has been run in. It generates the output successfully
 
 ## Changelog
+
+** Version 0.4.2
+* CamelCase compile sequence
 
 ** Version 0.4.1**
 * SOURCE_DEFAULT works & is documented

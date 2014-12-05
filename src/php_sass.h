@@ -13,7 +13,7 @@
 #include "config.h"
 #endif
 
-#define SASS_VERSION "0.4.1-beta"
+#define SASS_VERSION "0.4.2-beta"
 #define SASS_FLAVOR  "sassyphpras"
 
 #include <php.h>
@@ -30,7 +30,7 @@ zend_class_entry *sass_get_exception_base();
 
 PHP_METHOD(Sass, __construct);
 PHP_METHOD(Sass, compile);
-PHP_METHOD(Sass, compile_file);
+PHP_METHOD(Sass, compileFile);
 PHP_METHOD(Sass, getStyle);
 PHP_METHOD(Sass, setStyle);
 PHP_METHOD(Sass, getComments);

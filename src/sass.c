@@ -22,7 +22,7 @@ zend_object_handlers sass_handlers;
 typedef struct sass_object {
     zend_object zo;
     int style;
-	int map;
+    int map;
     char* include_paths;
     char* image_path;
     char* map_path;
@@ -79,7 +79,7 @@ PHP_METHOD(Sass, __construct)
 
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     obj->style = SASS_STYLE_NESTED;
-	obj->map = SASS_SOURCE_COMMENTS_NONE;
+    obj->map = SASS_SOURCE_COMMENTS_NONE;
     obj->include_paths = NULL;
     obj->image_path = NULL;
     obj->map_path = NULL;
@@ -147,7 +147,7 @@ PHP_METHOD(Sass, compile)
  *
  * Parse a whole file FULL of Sass and return the CSS output
  */
-PHP_METHOD(Sass, compile_file)
+PHP_METHOD(Sass, compileFile)
 {
     array_init(return_value);
     sass_object *this = (sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
@@ -394,7 +394,7 @@ zend_class_entry *sass_get_exception_base(TSRMLS_D)
 zend_function_entry sass_methods[] = {
     PHP_ME(Sass,  __construct,     NULL,  ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     PHP_ME(Sass,  compile,         NULL,  ZEND_ACC_PUBLIC)
-    PHP_ME(Sass,  compile_file,    NULL,  ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  compileFile,    NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getStyle,        NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  setStyle,        NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getComments,     NULL,  ZEND_ACC_PUBLIC)
@@ -427,13 +427,13 @@ static PHP_MINIT_FUNCTION(sass)
 
     #define REGISTER_SASS_CLASS_CONST_LONG(name, value) zend_declare_class_constant_long(sass_ce, ZEND_STRS( #name ) - 1, value TSRMLS_CC)
 
-    REGISTER_SASS_CLASS_CONST_LONG(STYLE_NESTED, SASS_STYLE_NESTED);
-    REGISTER_SASS_CLASS_CONST_LONG(STYLE_EXPANDED, SASS_STYLE_EXPANDED);
-    REGISTER_SASS_CLASS_CONST_LONG(STYLE_COMPACT, SASS_STYLE_COMPACT);
-    REGISTER_SASS_CLASS_CONST_LONG(STYLE_COMPRESSED, SASS_STYLE_COMPRESSED);
+    REGISTER_SASS_CLASS_CONST_LONG(STYLE_NESTED, SASS_OUTPUT_NESTED);
+    REGISTER_SASS_CLASS_CONST_LONG(STYLE_EXPANDED, SASS_OUTPUT_EXPANDED);
+    REGISTER_SASS_CLASS_CONST_LONG(STYLE_COMPACT, SASS_OUTPUT_COMPACT);
+    REGISTER_SASS_CLASS_CONST_LONG(STYLE_COMPRESSED, SASS_OUTPUT_COMPRESSED);
     REGISTER_SASS_CLASS_CONST_LONG(STYLE_FORMATTED, SASS_OUTPUT_FORMATTED);
-	REGISTER_SASS_CLASS_CONST_LONG(SOURCE_NONE, SASS_SOURCE_COMMENTS_NONE);
-   	REGISTER_SASS_CLASS_CONST_LONG(SOURCE_DEFAULT, SASS_SOURCE_COMMENTS_DEFAULT);
+    REGISTER_SASS_CLASS_CONST_LONG(SOURCE_NONE, SASS_SOURCE_COMMENTS_NONE);
+       REGISTER_SASS_CLASS_CONST_LONG(SOURCE_DEFAULT, SASS_SOURCE_COMMENTS_DEFAULT);
     REGISTER_SASS_CLASS_CONST_LONG(SOURCE_MAP, SASS_SOURCE_COMMENTS_MAP);
 
 
