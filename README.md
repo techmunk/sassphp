@@ -46,10 +46,10 @@ This extension has a very simple API:
     $sass = new Sass();
     $css = $sass->compile($source);
 
-You can compile a file with `compile_file()`:
+You can compile a file with `compileFile()`:
 
     $sass = new Sass();
-    $css = $sass->compile_file($source);
+    $css = $sass->compileFile($source);
 
 You can set the include path for the library to use:
 
