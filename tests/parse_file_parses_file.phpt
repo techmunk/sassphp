@@ -6,7 +6,7 @@ parse_file() parses correct Sass file
 <?php
 
 $sass = new Sass();
-$css = $sass->compile_file('tests/support/test.scss');
+$css = $sass->compileFile('tests/support/test.scss');
 echo $css;
 
 ?>

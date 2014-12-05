@@ -7,7 +7,7 @@ parse_file()  parses correct Sass file and provides source comments
 
 $sass = new Sass();
 $sass->setComments(Sass::SOURCE_DEFAULT);
-$css = $sass->compile_file('tests/support/test.scss');
+$css = $sass->compileFile('tests/support/test.scss');
 echo $css;
 
 
