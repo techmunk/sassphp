@@ -25,10 +25,6 @@ echo $sass->getStyle();
 $sass->setStyle(Sass::STYLE_COMPRESSED);
 echo $sass->getStyle();
 
-// test SASS_OUTPUT_FORMATTED
-$sass->setStyle(Sass::STYLE_FORMATTED);
-echo $sass->getStyle();
-
 ?>
 --EXPECT--
-001234
+00123
