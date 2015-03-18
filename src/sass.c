@@ -103,7 +103,7 @@ PHP_METHOD(Sass, compile)
 
     // "Hand over the source, buddy!"
     // "Which one, béchamel or arrabbiata?"
-    context->source_string = source;
+    context->source_string = strdup(source);
 
     // Compile it!
     sass_compile(context);
