@@ -24,6 +24,7 @@ typedef struct sass_object {
     int style;
     char* include_paths;
     char* image_path;
+    long precision;
 } sass_object;
 
 zend_class_entry *sass_ce;
@@ -77,6 +78,7 @@ PHP_METHOD(Sass, __construct)
     obj->style = SASS_STYLE_NESTED;
     obj->include_paths = NULL;
     obj->image_path = NULL;
+    obj->precision = 5;
 
 }
 
@@ -104,6 +106,7 @@ PHP_METHOD(Sass, compile)
 
     context->options.include_paths = this->include_paths != NULL ? this->include_paths : "";
     context->options.image_path = this->include_paths != NULL ? this->image_path : "";
+    context->options.precision = this->precision;
     context->options.output_style = this->style;
 
     // "Hand over the source, buddy!"
@@ -170,6 +173,7 @@ PHP_METHOD(Sass, compile_file)
 
     context->options.include_paths = this->include_paths != NULL ? this->include_paths : "";
     context->options.image_path = this->include_paths != NULL ? this->image_path : "";
+    context->options.precision = this->precision;
     context->options.output_style = this->style;
 
     context->input_path = file;
@@ -259,6 +263,34 @@ PHP_METHOD(Sass, setIncludePath)
     RETURN_NULL();
 }
 
+PHP_METHOD(Sass, getPrecision)
+{
+    zval *this = getThis();
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "", NULL) == FAILURE) {
+        RETURN_FALSE;
+    }
+
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    RETURN_LONG(obj->precision);
+}
+
+PHP_METHOD(Sass, setPrecision)
+{
+    zval *this = getThis();
+
+    long new_precision;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &new_precision) == FAILURE) {
+        RETURN_FALSE;
+    }
+
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    obj->precision = new_precision;
+
+    RETURN_NULL();
+}
+
 PHP_METHOD(Sass, getImagePath)
 {
     zval *this = getThis();
@@ -314,6 +346,8 @@ zend_function_entry sass_methods[] = {
     PHP_ME(Sass,  setIncludePath,  NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getImagePath,    NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  setImagePath,    NULL,  ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  getPrecision,    NULL,  ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  setPrecision,    NULL,  ZEND_ACC_PUBLIC)
     {NULL, NULL, NULL}
 };
 
