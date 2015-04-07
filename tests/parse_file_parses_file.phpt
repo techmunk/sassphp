@@ -13,7 +13,7 @@ echo $css;
 --EXPECT--
 @import url(../blahblah/blah.blah);
 div {
-  blah: "hello 4 world px bloo\n blah"; }
+  blah: "hello 4 world px bloo blah"; }
 
 div {
   blah: "foo iphone"; }

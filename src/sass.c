@@ -23,7 +23,6 @@ typedef struct sass_object {
     zend_object zo;
     int style;
     char* include_paths;
-    char* image_path;
     long precision;
 } sass_object;
 
@@ -34,8 +33,6 @@ void sass_free_storage(void *object TSRMLS_DC)
     sass_object *obj = (sass_object *)object;
     if (obj->include_paths != NULL)
         efree(obj->include_paths);
-    if (obj->image_path != NULL)
-        efree(obj->image_path);
 
     zend_hash_destroy(obj->zo.properties);
     FREE_HASHTABLE(obj->zo.properties);
@@ -77,7 +74,6 @@ PHP_METHOD(Sass, __construct)
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     obj->style = SASS_STYLE_NESTED;
     obj->include_paths = NULL;
-    obj->image_path = NULL;
     obj->precision = 5;
 
 }
@@ -105,13 +101,12 @@ PHP_METHOD(Sass, compile)
     struct sass_context* context = sass_new_context();
 
     context->options.include_paths = this->include_paths != NULL ? this->include_paths : "";
-    context->options.image_path = this->include_paths != NULL ? this->image_path : "";
     context->options.precision = this->precision;
     context->options.output_style = this->style;
 
     // "Hand over the source, buddy!"
     // "Which one, béchamel or arrabbiata?"
-    context->source_string = source;
+    context->source_string = strdup(source);
 
     // Compile it!
     sass_compile(context);
@@ -172,7 +167,6 @@ PHP_METHOD(Sass, compile_file)
     struct sass_file_context* context = sass_new_file_context();
 
     context->options.include_paths = this->include_paths != NULL ? this->include_paths : "";
-    context->options.image_path = this->include_paths != NULL ? this->image_path : "";
     context->options.precision = this->precision;
     context->options.output_style = this->style;
 
@@ -291,38 +285,6 @@ PHP_METHOD(Sass, setPrecision)
     RETURN_NULL();
 }
 
-PHP_METHOD(Sass, getImagePath)
-{
-    zval *this = getThis();
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "", NULL) == FAILURE) {
-        RETURN_FALSE;
-    }
-
-    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
-    if (obj->image_path == NULL) RETURN_STRING("", 1)
-    RETURN_STRING(obj->image_path, 1)
-}
-
-PHP_METHOD(Sass, setImagePath)
-{
-    zval *this = getThis();
-
-    char *path;
-    int path_len;
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len) == FAILURE)
-        RETURN_FALSE;
-
-    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
-    if (obj->image_path != NULL)
-        efree(obj->image_path);
-    obj->image_path = estrndup(path, path_len);
-
-    RETURN_NULL();
-}
-
-
 /* --------------------------------------------------------------
  * EXCEPTION HANDLING
  * ------------------------------------------------------------ */
@@ -344,8 +306,6 @@ zend_function_entry sass_methods[] = {
     PHP_ME(Sass,  setStyle,        NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getIncludePath,  NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  setIncludePath,  NULL,  ZEND_ACC_PUBLIC)
-    PHP_ME(Sass,  getImagePath,    NULL,  ZEND_ACC_PUBLIC)
-    PHP_ME(Sass,  setImagePath,    NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getPrecision,    NULL,  ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  setPrecision,    NULL,  ZEND_ACC_PUBLIC)
     {NULL, NULL, NULL}
@@ -374,7 +334,6 @@ static PHP_MINIT_FUNCTION(sass)
     REGISTER_SASS_CLASS_CONST_LONG(STYLE_EXPANDED, SASS_STYLE_EXPANDED);
     REGISTER_SASS_CLASS_CONST_LONG(STYLE_COMPACT, SASS_STYLE_COMPACT);
     REGISTER_SASS_CLASS_CONST_LONG(STYLE_COMPRESSED, SASS_STYLE_COMPRESSED);
-    REGISTER_SASS_CLASS_CONST_LONG(STYLE_FORMATTED, SASS_OUTPUT_FORMATTED);
 
     REGISTER_STRING_CONSTANT("SASS_FLAVOR", SASS_FLAVOR, CONST_CS | CONST_PERSISTENT);
 

@@ -1,7 +1,7 @@
 @import url(../blahblah/blah.blah);
 
 div {
-  blah: "hello #{2+2} world #{unit(23px)} #{'bloo\n'} blah";
+  blah: "hello #{2+2} world #{unit(23px)} #{'bloo'} blah";
 }
 
 $foo: iphone;
