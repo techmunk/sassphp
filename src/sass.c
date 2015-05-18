@@ -109,7 +109,7 @@ PHP_METHOD(Sass, compile)
     }
 
     // Create a new sass_context
-    struct Sass_Data_Context* data_context = sass_make_data_context(source);
+    struct Sass_Data_Context* data_context = sass_make_data_context(strdup(source));
     struct Sass_Context* ctx = sass_data_context_get_context(data_context);
 
     set_options(this, ctx);
