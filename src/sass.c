@@ -78,6 +78,17 @@ PHP_METHOD(Sass, __construct)
 
 }
 
+
+void set_options(sass_object *this, struct Sass_Context *ctx)
+{
+    struct Sass_Options* opts = sass_context_get_options(ctx);
+
+    sass_option_set_precision(opts, this->precision);
+    sass_option_set_output_style(opts, this->style);
+    if (this->include_paths != NULL)
+        sass_option_set_include_path(opts, this->include_paths);
+}
+
 /**
  * $sass->parse(string $source, [  ]);
  *
@@ -98,40 +109,24 @@ PHP_METHOD(Sass, compile)
     }
 
     // Create a new sass_context
-    struct sass_context* context = sass_new_context();
+    struct Sass_Data_Context* data_context = sass_make_data_context(strdup(source));
+    struct Sass_Context* ctx = sass_data_context_get_context(data_context);
 
-    context->options.include_paths = this->include_paths != NULL ? this->include_paths : "";
-    context->options.precision = this->precision;
-    context->options.output_style = this->style;
+    set_options(this, ctx);
 
-    // "Hand over the source, buddy!"
-    // "Which one, béchamel or arrabbiata?"
-    context->source_string = strdup(source);
-
-    // Compile it!
-    sass_compile(context);
+    int status = sass_compile_data_context(data_context);
 
     // Check the context for any errors...
-    if (context->error_status)
+    if (status != 0)
     {
-        zend_throw_exception(sass_exception_ce, trim(context->error_message), 0 TSRMLS_CC);
+        zend_throw_exception(sass_exception_ce, sass_context_get_error_message(ctx), 0 TSRMLS_CC);
     }
-
-    // Do we have an output?
-    else if (context->output_string)
-    {
-        // Send it over to PHP.
-        RETURN_STRING(context->output_string, 1);
-    }
-
-    // There's been a major issue
     else
     {
-        zend_throw_exception(sass_exception_ce, "Unknown Error", 0 TSRMLS_CC);
+        RETVAL_STRING(sass_context_get_output_string(ctx), 1);
     }
 
-    // Over and out.
-    sass_free_context(context);
+    sass_delete_data_context(data_context);
 }
 
 /**
@@ -156,46 +151,29 @@ PHP_METHOD(Sass, compile_file)
     // First, do a little checking of our own. Does the file exist?
     if( access( file, F_OK ) == -1 )
     {
-        char err[200];
-        sprintf(err, "File %s could not be found", file);
-
-        zend_throw_exception(sass_exception_ce, err, 0 TSRMLS_CC);
-        return;
+        zend_throw_exception_ex(sass_exception_ce, 0 TSRMLS_CC, "File %s could not be found", file);
+        RETURN_FALSE;
     }
 
     // Create a new sass_file_context
-    struct sass_file_context* context = sass_new_file_context();
+    struct Sass_File_Context* file_ctx = sass_make_file_context(file);
+    struct Sass_Context* ctx = sass_file_context_get_context(file_ctx);
 
-    context->options.include_paths = this->include_paths != NULL ? this->include_paths : "";
-    context->options.precision = this->precision;
-    context->options.output_style = this->style;
+    set_options(this, ctx);
 
-    context->input_path = file;
-
-    // Compile it!
-    sass_compile_file(context);
+    int status = sass_compile_file_context(file_ctx);
 
     // Check the context for any errors...
-    if (context->error_status)
+    if (status != 0)
     {
-        zend_throw_exception(sass_exception_ce, trim(context->error_message), 0 TSRMLS_CC);
+        zend_throw_exception(sass_exception_ce, sass_context_get_error_message(ctx), 0 TSRMLS_CC);
     }
-
-    // Do we have an output?
-    else if (context->output_string)
-    {
-        // Send it over to PHP.
-        RETURN_STRING(context->output_string, 1);
-    }
-
-    // There's been a major issue
     else
     {
-        zend_throw_exception(sass_exception_ce, "Unknown Error", 0 TSRMLS_CC);
+        RETVAL_STRING(sass_context_get_output_string(ctx), 1);
     }
 
-    // Over and out.
-    sass_free_file_context(context);
+    sass_delete_file_context(file_ctx);
 }
 
 PHP_METHOD(Sass, getStyle)
