@@ -151,11 +151,8 @@ PHP_METHOD(Sass, compile_file)
     // First, do a little checking of our own. Does the file exist?
     if( access( file, F_OK ) == -1 )
     {
-        char err[200];
-        sprintf(err, "File %s could not be found", file);
-
-        zend_throw_exception(sass_exception_ce, err, 0 TSRMLS_CC);
-        return;
+        zend_throw_exception_ex(sass_exception_ce, 0 TSRMLS_CC, "File %s could not be found", file);
+        RETURN_FALSE;
     }
 
     // Create a new sass_file_context
