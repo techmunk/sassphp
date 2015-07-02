@@ -13,7 +13,7 @@
 #include "config.h"
 #endif
 
-#define SASS_VERSION "0.4.2-beta"
+#define SASS_VERSION "0.4.4-dev"
 #define SASS_FLAVOR  "sassyphpras"
 
 #include <php.h>
@@ -21,7 +21,7 @@
 #include <Zend/zend_extensions.h>
 #include <Zend/zend_exceptions.h>
 
-#include "lib/libsass/sass_interface.h"
+#include "lib/libsass/sass_context.h"
 
 zend_class_entry *sass_ce;
 zend_class_entry *sass_exception_ce;
@@ -31,14 +31,14 @@ zend_class_entry *sass_get_exception_base();
 PHP_METHOD(Sass, __construct);
 PHP_METHOD(Sass, compile);
 PHP_METHOD(Sass, compileFile);
+PHP_METHOD(Sass, compileFileMap);
 PHP_METHOD(Sass, getStyle);
 PHP_METHOD(Sass, setStyle);
-PHP_METHOD(Sass, getComments);
-PHP_METHOD(Sass, setComments);
 PHP_METHOD(Sass, getIncludePath);
 PHP_METHOD(Sass, setIncludePath);
-PHP_METHOD(Sass, getImagePath);
-PHP_METHOD(Sass, setImagePath);
-PHP_METHOD(Sass, getMapPath);
-PHP_METHOD(Sass, setMapPath);
+PHP_METHOD(Sass, getPrecision);
+PHP_METHOD(Sass, setPrecision);
+PHP_METHOD(Sass, getComments);
+PHP_METHOD(Sass, setComments);
+
 #endif
