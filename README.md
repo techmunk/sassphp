@@ -88,6 +88,7 @@ To generate source comments for a file inline - now in camelCase:
     $css = $sass->compileFile($source);
 
 Aliases also exist so you can also use:
+
     $css = $sass->compile_file($source);
 
 You can set the source map file for the library to use:
