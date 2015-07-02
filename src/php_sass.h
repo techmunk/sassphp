@@ -40,5 +40,7 @@ PHP_METHOD(Sass, getPrecision);
 PHP_METHOD(Sass, setPrecision);
 PHP_METHOD(Sass, getComments);
 PHP_METHOD(Sass, setComments);
+PHP_METHOD(Sass, getEmbed);
+PHP_METHOD(Sass, setEmbed);
 
 #endif

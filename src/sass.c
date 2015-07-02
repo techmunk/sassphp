@@ -25,7 +25,7 @@ typedef struct sass_object {
     char* include_paths;
     bool comments;
     long precision;
-    char* source_map_file;
+    char* map_file;
     bool omit_map_url;
     bool map_embed;
     bool map_contents;
@@ -39,6 +39,9 @@ void sass_free_storage(void *object TSRMLS_DC)
     sass_object *obj = (sass_object *)object;
     if (obj->include_paths != NULL)
         efree(obj->include_paths);
+
+    if (obj->map_file != NULL)
+        efree(obj->map_file);
 
     zend_hash_destroy(obj->zo.properties);
     FREE_HASHTABLE(obj->zo.properties);
@@ -101,6 +104,7 @@ void set_options(sass_object *this, struct Sass_Context *ctx)
     sass_option_set_source_map_embed(opts, this->map_embed);
     sass_option_set_source_map_contents(opts, this->map_contents);
     sass_option_set_omit_source_map_url(opts, this->omit_map_url);
+    sass_option_set_source_map_file(opts, this->map_file);
 }
 
 /**
@@ -324,6 +328,35 @@ PHP_METHOD(Sass, setPrecision)
     RETURN_NULL();
 }
 
+PHP_METHOD(Sass, getEmbed)
+{
+    zval *this = getThis();
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "", NULL) == FAILURE) {
+        RETURN_FALSE;
+    }
+
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    RETURN_LONG(obj->map_embed);
+}
+
+PHP_METHOD(Sass, setEmbed)
+{
+    zval *this = getThis();
+
+    bool new_map_embed;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &new_map_embed) == FAILURE) {
+        RETURN_FALSE;
+    }
+
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    obj->map_embed = new_map_embed;
+
+    RETURN_NULL();
+}
+
+
 PHP_METHOD(Sass, getComments)
 {
     zval *this = getThis();
@@ -405,6 +438,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_sass_setComments, 0, 0, 1)
     ZEND_ARG_INFO(0, comments)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_sass_setEmbed, 0, 0, 1)
+    ZEND_ARG_INFO(0, map_embed)
+ZEND_END_ARG_INFO()
+
 
 zend_function_entry sass_methods[] = {
     PHP_ME(Sass,  __construct,       arginfo_sass_void,           ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
@@ -419,6 +456,8 @@ zend_function_entry sass_methods[] = {
     PHP_ME(Sass,  setPrecision,      arginfo_sass_setPrecision,   ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getComments,       arginfo_sass_void,           ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  setComments,       arginfo_sass_setComments,    ZEND_ACC_PUBLIC) 
+    PHP_ME(Sass,  getEmbed,          arginfo_sass_void,           ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  setEmbed,          arginfo_sass_setComments,    ZEND_ACC_PUBLIC)    
     PHP_ME(Sass,  getLibraryVersion, arginfo_sass_void,           ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
     PHP_MALIAS(Sass, compile_file, compileFile, NULL, ZEND_ACC_PUBLIC)
     PHP_MALIAS(Sass, compile_file_map, compileFileMap, NULL, ZEND_ACC_PUBLIC)
