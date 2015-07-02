@@ -71,9 +71,6 @@ You can set the style of your SASS file to suit your needs:
     $sass = new Sass();
     $sass->setStyle(Sass::STYLE_COMPRESSED);
 
-    $sass = new Sass();
-    $sass->setStyle(Sass::STYLE_FORMATTED);
-
 The new additions to this build from the [Sensational](https://github.com/sensational/sassphp) codebase are:
 * Camel case rename of `compile_file` to `compileFile`
 * SASS file compilation is now an array when a source map is enabled. Otherwise, as per normal, it's a string.
@@ -87,8 +84,11 @@ The output of `compileFile()` is now an array instead of a string, allowing both
 To generate source comments for a file inline - now in camelCase:
 
     $sass = new Sass();
-    $sass->setComments(Sass::SOURCE_DEFAULT);
+    $sass->setComments(true);
     $css = $sass->compileFile($source);
+
+Aliases also exist so you can also use:
+    $css = $sass->compile_file($source);
 
 You can set the source map file for the library to use:
 
@@ -124,7 +124,15 @@ If there's a problem, the extension will throw a `SassException`:
 
 * The file_comments test will fail as it remains unable to figure out the path the test has been run in. It generates the output successfully
 
+
+## Forward planning
+
+* HHVM Zend compatibility
+
 ## Changelog
+
+** Version 0.4.4 
+* Refactor correctly for LibSass 3.2.4
 
 ** Version 0.4.2
 * CamelCase compile sequence
