@@ -25,11 +25,11 @@ typedef struct sass_object {
     char* include_paths;
     bool comments;
     long precision;
-    char* map_file;
+    char* map_path;
     bool omit_map_url;
     bool map_embed;
     bool map_contents;
-    const char* source_map_root;
+    char* map_root;
 } sass_object;
 
 zend_class_entry *sass_ce;
@@ -83,7 +83,8 @@ PHP_METHOD(Sass, __construct)
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     obj->style = SASS_STYLE_NESTED;
     obj->include_paths = NULL;
-    obj->map_file = NULL;
+    obj->map_path = NULL;
+    obj->map_root = NULL;
     obj->comments = false;
     obj->map_embed = false;
     obj->map_contents = false;
@@ -105,7 +106,11 @@ void set_options(sass_object *this, struct Sass_Context *ctx)
     sass_option_set_source_map_embed(opts, this->map_embed);
     sass_option_set_source_map_contents(opts, this->map_contents);
     sass_option_set_omit_source_map_url(opts, this->omit_map_url);
-    sass_option_set_source_map_file(opts, this->map_file);
+    if (this->map_path != NULL)
+    sass_option_set_source_map_file(opts, this->map_path);
+    if (this->map_root != NULL)
+    ssass_option_set_source_map_root(opts, this->map_root);
+
 }
 
 /**
@@ -190,54 +195,7 @@ PHP_METHOD(Sass, compileFile)
     else
     {
         RETVAL_STRING(sass_context_get_output_string(ctx), 1);
-        }
-
-    sass_delete_file_context(file_ctx);
     }
-
-/**
- * $sass->parse_file(string $file_name);
- *
- * Parse a whole file FULL of Sass and return the CSS output
- */
-PHP_METHOD(Sass, compileFileMap)
-{
-    sass_object *this = (sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
-
-    // There's been a major issue
-    char *file;
-    int file_len;
-
-    // Grab the file name from the function
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &file, &file_len) == FAILURE)
-    {
-        RETURN_FALSE;
-    }
-
-    // Do we have source maps to go?
-    if( access( file, F_OK ) == -1 )
-    {
-        zend_throw_exception_ex(sass_exception_ce, 0 TSRMLS_CC, "File %s could not be found", file);
-        RETURN_FALSE;
-    }
-
-    // Create a new sass_file_context
-    struct Sass_File_Context* file_ctx = sass_make_file_context(file);
-    struct Sass_Context* ctx = sass_file_context_get_context(file_ctx);
-
-    set_options(this, ctx);
-
-    int status = sass_compile_file_context(file_ctx);
-
-    // Over and out.
-    if (status != 0)
-    {
-        zend_throw_exception(sass_exception_ce, sass_context_get_error_message(ctx), 0 TSRMLS_CC);
-    }
-    else
-    {
-        RETVAL_STRING(sass_context_get_source_map_string(ctx), 1);
-}
 
     sass_delete_file_context(file_ctx);
 }
@@ -310,8 +268,8 @@ PHP_METHOD(Sass, getMapPath)
     }
 
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
-    if (obj->map_file == NULL) RETURN_STRING("", 1)
-    RETURN_STRING(obj->map_file, 1)
+    if (obj->map_path == NULL) RETURN_STRING("", 1)
+    RETURN_STRING(obj->map_path, 1)
 }
 
 PHP_METHOD(Sass, setMapPath)
@@ -325,9 +283,9 @@ PHP_METHOD(Sass, setMapPath)
         RETURN_FALSE;
 
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
-    if (obj->map_file != NULL)
-        efree(obj->map_file);
-    obj->map_file = estrndup(path, path_len);
+    if (obj->map_path != NULL)
+        efree(obj->map_path);
+    obj->map_path = estrndup(path, path_len);
 
     RETURN_NULL();
 }
@@ -476,7 +434,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_sass_setEmbed, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_sass_setMapPath, 0, 0, 1)
-    ZEND_ARG_INFO(0, map_embed)
+    ZEND_ARG_INFO(0, map_path)
 ZEND_END_ARG_INFO()
 
 
@@ -484,7 +442,6 @@ zend_function_entry sass_methods[] = {
     PHP_ME(Sass,  __construct,       arginfo_sass_void,           ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
     PHP_ME(Sass,  compile,           arginfo_sass_compile,        ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  compileFile,       arginfo_sass_compileFile,    ZEND_ACC_PUBLIC)
-    PHP_ME(Sass,  compileFileMap,    arginfo_sass_compileFileMap, ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getStyle,          arginfo_sass_void,           ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  setStyle,          arginfo_sass_setStyle,       ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getIncludePath,    arginfo_sass_void,           ZEND_ACC_PUBLIC)
@@ -499,7 +456,6 @@ zend_function_entry sass_methods[] = {
     PHP_ME(Sass,  setMapPath,        arginfo_sass_setComments,    ZEND_ACC_PUBLIC)        
     PHP_ME(Sass,  getLibraryVersion, arginfo_sass_void,           ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
     PHP_MALIAS(Sass, compile_file, compileFile, NULL, ZEND_ACC_PUBLIC)
-    PHP_MALIAS(Sass, compile_file_map, compileFileMap, NULL, ZEND_ACC_PUBLIC)
     {NULL, NULL, NULL}
 };
 
