@@ -42,5 +42,7 @@ PHP_METHOD(Sass, getComments);
 PHP_METHOD(Sass, setComments);
 PHP_METHOD(Sass, getEmbed);
 PHP_METHOD(Sass, setEmbed);
+PHP_METHOD(Sass, getMapPath);
+PHP_METHOD(Sass, setMapPath);
 
 #endif
