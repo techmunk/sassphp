@@ -1,5 +1,5 @@
 --TEST--
-parse_file() parses correct Sass file
+compileFile() compiles correct file
 --SKIPIF--
 <?php if (!extension_loaded("sass")) print "skip"; ?>
 --FILE--
@@ -13,7 +13,7 @@ echo $css;
 --EXPECT--
 @import url(../blahblah/blah.blah);
 div {
-  blah: "hello 4 world px bloo\n blah"; }
+  blah: "hello 4 world px bloo blah"; }
 
 div {
   blah: "foo iphone"; }
