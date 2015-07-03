@@ -39,9 +39,10 @@ void sass_free_storage(void *object TSRMLS_DC)
     sass_object *obj = (sass_object *)object;
     if (obj->include_paths != NULL)
         efree(obj->include_paths);
-
-    if (obj->map_file != NULL)
-        efree(obj->map_file);
+    if (obj->map_path != NULL)
+        efree(obj->map_path);
+    if (obj->map_root != NULL)
+        efree(obj->map_root);
 
     zend_hash_destroy(obj->zo.properties);
     FREE_HASHTABLE(obj->zo.properties);
@@ -105,9 +106,11 @@ void set_options(sass_object *this, struct Sass_Context *ctx)
     sass_option_set_source_comments(opts, this->comments);
     sass_option_set_source_map_embed(opts, this->map_embed);
     sass_option_set_source_map_contents(opts, this->map_contents);
-    sass_option_set_omit_source_map_url(opts, this->omit_map_url);
-    if (this->map_path != NULL)
+    if (this->map_path != NULL) {
     sass_option_set_source_map_file(opts, this->map_path);
+    sass_option_set_omit_source_map_url(opts, false);
+    sass_option_set_source_map_contents(opts, true);
+    }
     if (this->map_root != NULL)
     ssass_option_set_source_map_root(opts, this->map_root);
 
@@ -160,6 +163,7 @@ PHP_METHOD(Sass, compile)
  */
 PHP_METHOD(Sass, compileFile)
 {
+    array_init(return_value);
     sass_object *this = (sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
     // We need a file name and a length
@@ -194,7 +198,20 @@ PHP_METHOD(Sass, compileFile)
     }
     else
     {
-        RETVAL_STRING(sass_context_get_output_string(ctx), 1);
+
+        if (this->map_path != NULL ){ 
+        // Send it over to PHP.
+        add_next_index_string(return_value, RETVAL_STRING(sass_context_get_output_string(ctx), 1), 1);
+        } else {
+        RETVAL_STRING(sass_context_get_output_string(ctx), 1);   
+        }
+
+         // Do we have source maps to go?
+         if (this->map_path != NULL)
+         {
+        // Send it over to PHP.
+        add_next_index_string(return_value, RETVAL_STRING(sass_context_get_source_map_string(ctx), 1), 1);
+        }
     }
 
     sass_delete_file_context(file_ctx);
