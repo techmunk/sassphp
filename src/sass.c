@@ -104,6 +104,9 @@ void set_options(sass_object *this, struct Sass_Context *ctx)
     if (this->include_paths != NULL)
         sass_option_set_include_path(opts, this->include_paths);
     sass_option_set_source_comments(opts, this->comments);
+    if (this->comments != NULL) {
+    sass_option_set_omit_source_map_url(opts, false);
+    }
     sass_option_set_source_map_embed(opts, this->map_embed);
     sass_option_set_source_map_contents(opts, this->map_contents);
     if (this->map_path != NULL) {
@@ -199,9 +202,9 @@ PHP_METHOD(Sass, compileFile)
     else
     {
 
-        if (this->map_path != NULL ){ 
+        if (this->map_path != NULL ) { 
         // Send it over to PHP.
-        add_next_index_string(return_value, RETVAL_STRING(sass_context_get_output_string(ctx), 1), 1);
+        add_next_index_string(return_value, sass_context_get_output_string(ctx), 1);
         } else {
         RETVAL_STRING(sass_context_get_output_string(ctx), 1);   
         }
@@ -209,9 +212,9 @@ PHP_METHOD(Sass, compileFile)
          // Do we have source maps to go?
          if (this->map_path != NULL)
          {
-        // Send it over to PHP.
-        add_next_index_string(return_value, RETVAL_STRING(sass_context_get_source_map_string(ctx), 1), 1);
-        }
+         // Send it over to PHP.
+         add_next_index_string(return_value, sass_context_get_source_map_string(ctx), 1);
+         }
     }
 
     sass_delete_file_context(file_ctx);
@@ -426,10 +429,6 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_sass_compileFile, 0, 0, 1)
     ZEND_ARG_INFO(0, filename)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_sass_compileFileMap, 0, 0, 1)
-    ZEND_ARG_INFO(0, filename)
-ZEND_END_ARG_INFO()
-
 ZEND_BEGIN_ARG_INFO_EX(arginfo_sass_setStyle, 0, 0, 1)
     ZEND_ARG_INFO(0, style)
 ZEND_END_ARG_INFO()
@@ -470,7 +469,7 @@ zend_function_entry sass_methods[] = {
     PHP_ME(Sass,  getEmbed,          arginfo_sass_void,           ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  setEmbed,          arginfo_sass_setComments,    ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getMapPath,        arginfo_sass_void,           ZEND_ACC_PUBLIC)
-    PHP_ME(Sass,  setMapPath,        arginfo_sass_setComments,    ZEND_ACC_PUBLIC)        
+    PHP_ME(Sass,  setMapPath,        arginfo_sass_setMapPath,     ZEND_ACC_PUBLIC)        
     PHP_ME(Sass,  getLibraryVersion, arginfo_sass_void,           ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
     PHP_MALIAS(Sass, compile_file, compileFile, NULL, ZEND_ACC_PUBLIC)
     {NULL, NULL, NULL}

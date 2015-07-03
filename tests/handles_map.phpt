@@ -7,20 +7,11 @@ correctly handles setting and getting source map formats
 
 $sass = new Sass();
 // test default from constructor
-echo $sass->getComments();
-
-// test SASS_SOURCE_NONE
-$sass->setComments(Sass::SOURCE_NONE);
-echo $sass->getComments();
-
-// test SASS_SOURCE_DEFAULT
-$sass->setComments(Sass::SOURCE_DEFAULT);
-echo $sass->getComments();
-
-// test SASS_SOURCE_MAP
-$sass->setComments(Sass::SOURCE_MAP);
-echo $sass->getComments();
+$sass->setComments(true);
+$sass->setMapPath(__DIR__.'/test.css.map');
+$sass->compileFile(__DIR__.'/support/test.scss');
 
 ?>
 --EXPECT--
-0012
+huge.css.map
+
