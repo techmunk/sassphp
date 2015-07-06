@@ -129,7 +129,7 @@ If there's a problem, the extension will throw a `SassException`:
 ## Forward planning
 
 * HHVM Zend compatibility?
-* Apache extension?
+* Nginx extension?
 
 ## Changelog
 
