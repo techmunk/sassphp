@@ -128,9 +128,13 @@ If there's a problem, the extension will throw a `SassException`:
 
 ## Forward planning
 
-* HHVM Zend compatibility
+* HHVM Zend compatibility?
+* Apache extension?
 
 ## Changelog
+
+** Version 0.4.5 
+* Holiday Patch (Libsass 3.2.5) stable
 
 ** Version 0.4.4 
 * Refactor correctly for LibSass 3.2.4
