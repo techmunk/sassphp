@@ -8,10 +8,11 @@ correctly handles setting and getting source map formats
 $sass = new Sass();
 // test default from constructor
 $sass->setComments(true);
-$sass->setMapPath(__DIR__.'/test.css.map');
+$sass->setMapPath(__DIR__.'/support/huge.css.map');
 $sass->compileFile(__DIR__.'/support/test.scss');
 
 ?>
+--EXPECT_EXTERNAL--
+support/huge.css.map
 --EXPECT--
-huge.css.map
 
