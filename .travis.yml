@@ -2,22 +2,40 @@ language: cpp
 
 compiler:
   - gcc
+  - clang
 
 before_install:
   - echo $LANG
   - echo $LC_ALL
   - if [ $TRAVIS_OS_NAME == linux ]; then sudo apt-get update && sudo apt-get install -y llvm-3.4 llvm-3.4-dev; fi
   - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install llvm35 && brew link --force llvm35; fi
-  - rvm use $RVM --install --binary --fuzzy
-  - apt-get install php
-  - gem --version
-
-before_script:
   - git submodule init
   - git submodule update
 
+
+before_script:
+  - travis_retry bundle
+  - if [ $TRAVIS_OS_NAME == linux ]; then travis_retry ./configure --llvm-config llvm-config-3.4; fi
+  - if [ $TRAVIS_OS_NAME == osx ]; then travis_retry ./configure; fi
+
+install: 
+  - make get-deps
+
 script:
-  - bundle php install.php
+  - make clean
+  - cd lib/libsass && make && cd ../..
+  - phpize
+  - ./configure
+  - make
+
+after_success:
+  - make test
+
+
+notifications:
+    on_success: never
+    on_failure: never
 
 os:
   - linux
+  - osx
