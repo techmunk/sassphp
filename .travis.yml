@@ -28,7 +28,6 @@ script:
 after_success:
   - make test
 
-
 notifications:
     on_success: never
     on_failure: never
