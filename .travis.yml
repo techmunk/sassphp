@@ -27,6 +27,7 @@ script:
   - phpize
   - ./configure
   - make
+  - make install
   - make test
 
 notifications:
