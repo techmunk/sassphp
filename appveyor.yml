@@ -13,7 +13,7 @@ platform:
 
 configuration: Release
 
-version: '{build}-$(PHP_VERSION)'
+version: '0.0.{build}'
 
 matrix:
   fast_finish: true
