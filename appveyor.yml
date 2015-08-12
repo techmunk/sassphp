@@ -7,7 +7,9 @@ configuration:
   - Release
 
 install:
-  - git git clone -q --branch=master https://github.com/absalomedia/sassphp.git C:\projects\sassphp
+  - cd C:\projects\sassphp
+  - git submodule init
+  - git submodule update
   - cinst php-devel
   - SET PATH=C:\php\;%PATH%
   - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64'
