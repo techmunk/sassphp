@@ -1,22 +1,16 @@
 environment:
-  matrix:
  - PHP_VERSION: 5.6.12
-    platform: x86
-  - PHP_VERSION: 5.5.28
-    platform: x86
-  #x64
-  - PHP_VERSION: 5.6.12
-    platform: x64
-  - PHP_VERSION: 5.5.28
-    platform: x64
-
 os: 
   - Visual Studio 2015
   - Windows Server 2012 R2
 
+platform: 
+  - x86
+  - x64
+
 configuration: Release
 
-version: '0.0.{build}-$(PHP_VERSION)'
+version: '{build}-$(PHP_VERSION)'
 
 matrix:
   fast_finish: true
