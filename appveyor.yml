@@ -18,10 +18,6 @@ configuration: Release
 
 version: '0.0.{build}-$(PHP_VERSION)'
 
-build:
-  parallel: true
-  verbosity: detailed
-
 matrix:
   fast_finish: true
 
