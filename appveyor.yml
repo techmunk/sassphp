@@ -25,13 +25,13 @@ install:
   - cd %APPVEYOR_BUILD_FOLDER%
   - echo Preparing Windows build...
   - echo Downloading PHP source code [%PHP_VERSION%]
-  - ps: (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/php-' + ${env:PHP_VERSION} + 'src.zip', ${env:APPVEYOR_BUILD_FOLDER} + '\..\php-src.zip')
+  - ps: (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/php-' + %PHP_VERSION% + 'src.zip', %APPVEYOR_BUILD_FOLDER% + '\..\php-src.zip')
   - cd ..
   - 7z x -y php-src.zip -oC:\php-src
   - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64'
 
 build_script: 
-  - cd C:\php-src\php-' + ${env:PHP_VERSION} + '-src
+  - cd C:\php-src\php-' + %PHP_VERSION% + '-src
   - buildconf.bat --add-modules-dir=C:\projects\sassphp
   - configure.bat --disable-all --enable-cli --enable-sass
   - nmake php_sass.dll
