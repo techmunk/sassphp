@@ -27,7 +27,7 @@ install:
   - ps: (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/php-' + ${env:PHP_VERSION} + 'src.zip', ${env:APPVEYOR_BUILD_FOLDER} + '\..\php-src.zip')
   - cd ..
   - 7z x -y php-src.zip -oC:\php-src
-  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /' + ${env:platform} + ''
+  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64'
 
 build_script: 
   - cd C:\php-src\php-' + ${env:PHP_VERSION} + '-src
