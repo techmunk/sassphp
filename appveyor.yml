@@ -10,7 +10,7 @@ install:
   - cd C:\projects\sassphp
   - git submodule init
   - git submodule update
-  - cinst php-devel
+  - cinst php5-dev
   - SET PATH=C:\php\;%PATH%
   - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64'
   - cd C:\php-src\
