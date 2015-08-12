@@ -1,10 +1,29 @@
-platform:
-  - x64
-  - x86
+environment:
+  matrix:
+ - PHP_VERSION: 5.6.12
+    platform: x86
+  - PHP_VERSION: 5.5.28
+    platform: x86
+  #x64
+  - PHP_VERSION: 5.6.12
+    platform: x64
+  - PHP_VERSION: 5.5.28
+    platform: x64
 
-configuration:
-  - Debug
-  - Release
+os: 
+  - Visual Studio 2015
+  - Windows Server 2012 R2
+
+configuration: Release
+
+version: '0.0.{build}-$(PHP_VERSION)'
+
+build:
+  parallel: true
+  verbosity: detailed
+
+matrix:
+  fast_finish: true
 
 install:
   - cd C:\projects\sassphp
@@ -12,19 +31,25 @@ install:
   - git submodule update
   - cd C:\
   - mkdir php-src
-  - ps: (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/php-5.6.12-src.zip', 'php-5.6.12-src.zip')
-  - cd %appveyor_build_folder%
-  - 7z x -y %appveyor_build_folder%\php-5.6.12-src.zip -oC:\php-src
-  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64'
-  - cd C:\php-src\php-5.6.12-src
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - echo Preparing Windows build...
+  - echo Downloading PHP source code [%PHP_VERSION%]
+  - ps: (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/php-' + ${env:PHP_VERSION} + 'src.zip', ${env:APPVEYOR_BUILD_FOLDER} + '\..\php-src.zip')
+  - cd ..
+  - 7z x -y php-src.zip -oC:\php-src
+  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /' + ${env:platform} + ''
+
+build_script: 
+  - cd C:\php-src\php-' + ${env:PHP_VERSION} + '-src
   - buildconf.bat --add-modules-dir=C:\projects\sassphp
   - configure.bat --disable-all --enable-cli --enable-sass
   - nmake php_sass.dll
-
-build: OFF
 
 test: OFF
 
 test_script: OFF
 
 deploy: OFF
+
+artifacts:
+  - path: ext\Release_TS\php_sass.dll
