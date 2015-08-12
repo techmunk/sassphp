@@ -10,7 +10,10 @@ install:
   - cd C:\projects\sassphp
   - git submodule init
   - git submodule update
-  - ps: (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/php-5.6.12-src.zip', 'C:\php-5.6.12-src.zip');(new-object -com shell.application).namespace('C:\php-src').CopyHere((new-object -com shell.application).namespace('C:\php-5.6.12-src.zip').Items(),16)
+  - cd C:\
+  - mkdir php-src
+  - ps: (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/php-5.6.12-src.zip', 'php-5.6.12-src.zip')
+  - ps: (new-object -com shell.application).namespace('C:\php-src').CopyHere((new-object -com shell.application).namespace('C:\php-5.6.12-src.zip').Items(),16)
   - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64'
   - cd C:\php-src\
   - buildconf.bat --add-modules-dir=C:\projects\sassphp
