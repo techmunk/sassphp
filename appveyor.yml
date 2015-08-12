@@ -14,7 +14,7 @@ install:
   - mkdir php-src
   - ps: (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/php-5.6.12-src.zip', 'php-5.6.12-src.zip')
   - cd %appveyor_build_folder%
-  - 7z x -y php-5.6.12-src.zip -oC:\php-src
+  - 7z x -y %appveyor_build_folder%\php-5.6.12-src.zip -oC:\php-src
   - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64'
   - cd C:\php-src\php-5.6.12-src
   - buildconf.bat --add-modules-dir=C:\projects\sassphp
