@@ -1,0 +1,25 @@
+platform:
+  - x64
+  - x86
+
+configuration:
+  - Debug
+  - Release
+
+install:
+  - git git clone -q --branch=master https://github.com/absalomedia/sassphp.git C:\projects\sassphp
+  - cinst php-devel
+  - SET PATH=C:\php\;%PATH%
+  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64'
+  - cd C:\php-src\
+  - buildconf.bat --add-modules-dir=C:\projects\sassphp
+  - configure.bat --disable-all --enable-cli --enable-sass
+  - nmake php_sass.dll
+
+build: OFF
+
+test: OFF
+
+test_script: OFF
+
+deploy: OFF
