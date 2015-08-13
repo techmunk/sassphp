@@ -41,5 +41,10 @@ test_script: OFF
 
 deploy: OFF
 
+notifications:
+  - on_build_success: false
+    on_build_failure: false
+    on_build_status_changed: false
+
 artifacts:
   - path: ext\Release_TS\php_sass.dll
