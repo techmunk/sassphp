@@ -31,8 +31,8 @@ install:
 
 build_script: 
   - cd C:\php-src\php-5.6.12-src
-  - buildconf.bat --add-modules-dir=C:\projects\sassphp
-  - cscript /nologo configure.js % --disable-all --enable-cli --enable-sass
+  - buildconf.bat --add-modules-dir=C:\projects
+  - configure --disable-all --enable-cli --enable-sass
   - nmake php_sass.dll
 
 test: OFF
