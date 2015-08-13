@@ -12,7 +12,7 @@ ADD_FLAG('CFLAGS_BD_SAPI_CLI', ' /wd4018 ');
 
 if (PHP_SASS == "yes") {
 	CHECK_LIB("sass", lib/libexec, LIBSASS_SHARED_LIBADD);
-	LDFLAGS="-lsass -L"`pwd`"/lib/libsass/lib/ -lstdc++";
+	LDFLAGS="-lsass -L"'pwd'"/lib/libsass/lib/ -lstdc++";
 	EXTENSION("sass", "src/sass.c src/utilities.c", true);
 
 	if ("x$sass_version" != "x") {
