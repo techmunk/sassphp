@@ -115,7 +115,7 @@ void set_options(sass_object *this, struct Sass_Context *ctx)
     sass_option_set_source_map_contents(opts, true);
     }
     if (this->map_root != NULL)
-    ssass_option_set_source_map_root(opts, this->map_root);
+    sass_option_set_source_map_root(opts, this->map_root);
 
 }
 
