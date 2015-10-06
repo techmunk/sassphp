@@ -40,8 +40,9 @@ script:
   - echo "extension = sass.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/modules"
   - make install
-  - make test 
-  - phpunit -c phpunit.xml
+  - mkdir -p build/logs
+  - make test
+  - phpunit -c phpunit.xml --coverage-clover build/logs/clover.xml
 
 notifications:
     on_success: never
