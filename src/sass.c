@@ -102,7 +102,7 @@ void set_options(sass_object *this, struct Sass_Context *ctx)
     sass_option_set_precision(opts, this->precision);
     sass_option_set_output_style(opts, this->style);
     if (this->include_paths != NULL) {
-        sass_option_set_include_path(opts, this->include_paths);
+    sass_option_set_include_path(opts, this->include_paths);
     }
     sass_option_set_source_comments(opts, this->comments);
     if (this->comments != NULL) {
