@@ -4,10 +4,13 @@ php:
   - 5.5
   - 5.6
 
-global:
+env:
+  global:
     # Configure the .phpt tests to be Travis friendly
     - REPORT_EXIT_STATUS=1
     - TEST_PHP_ARGS="-q -s output.txt -g XFAIL,FAIL,BORK,WARN,LEAK,SKIP -x --show-diff"
+    # Add the pip installation folder to the PATH, until https://github.com/travis-ci/travis-ci/issues/3563 is fixed
+    - PATH=$HOME/.local/bin:$PATH
 
 compiler:
   - gcc
@@ -26,14 +29,15 @@ before_install:
   - sudo service apache2 restart
   - git submodule init
   - git submodule update
+
+
+script:
   - make clean
   - cd lib/libsass && make && cd ../..
   - phpize
   - ./configure
   - make
   - echo "extension = sass.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-
-script:
   - make test 
   - ./bin/phpunit
 
