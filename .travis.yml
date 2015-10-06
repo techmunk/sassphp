@@ -39,7 +39,7 @@ script:
   - make
   - echo "extension = sass.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - make test 
-  - ./bin/phpunit
+  - phpunit
 
 notifications:
     on_success: never
