@@ -1,8 +1,11 @@
-language: cpp
+language: php
+php:
+  - 5.4
+  - 5.5
+  - 5.6
 
 compiler:
   - gcc
-  - clang
 
 before_install:
   - echo $LANG
@@ -16,8 +19,6 @@ before_install:
   - echo "$(curl -fsSL https://gist.github.com/roderik/16d751c979fdeb5a14e3/raw/gistfile1.txt)" | sudo tee /etc/apache2/conf.d/phpconfig > /dev/null
   - echo "$(curl -fsSL https://gist.github.com/roderik/2eb301570ed4a1f4c33d/raw/gistfile1.txt)" | sed -e "s,PATH,`pwd`/web,g" | sudo tee /etc/apache2/sites-available/default > /dev/null
   - sudo service apache2 restart
-  - mysql -u root -e "CREATE USER 'myproject'@'localhost' IDENTIFIED BY 'mypass'"
-  - mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'myproject'@'localhost' WITH GRANT OPTION;"
   - git submodule init
   - git submodule update
 
@@ -27,7 +28,7 @@ script:
   - phpize
   - ./configure
   - make
-  - make install
+  - echo "extension = sass.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - make test
 
 notifications:
