@@ -41,7 +41,7 @@ script:
   - export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/modules"
   - make install
   - make test 
-  - phpunit
+  - phpunit -c phpunit.xml
 
 notifications:
     on_success: never
