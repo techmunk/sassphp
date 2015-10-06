@@ -38,6 +38,7 @@ script:
   - ./configure
   - make
   - echo "extension = sass.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/modules"
   - make test 
   - phpunit
 
