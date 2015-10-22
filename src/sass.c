@@ -24,6 +24,7 @@ typedef struct sass_object {
     int style;
     char* include_paths;
     bool comments;
+    bool indent;
     long precision;
     char* map_path;
     bool omit_map_url;
@@ -87,6 +88,7 @@ PHP_METHOD(Sass, __construct)
     obj->map_path = NULL;
     obj->map_root = NULL;
     obj->comments = false;
+    obj->indent = false;
     obj->map_embed = false;
     obj->map_contents = false;
     obj->omit_map_url = true;
@@ -101,6 +103,7 @@ void set_options(sass_object *this, struct Sass_Context *ctx)
 
     sass_option_set_precision(opts, this->precision);
     sass_option_set_output_style(opts, this->style);
+    sass_option_set_is_indented_syntax_src(opts, this->indent);
     if (this->include_paths != NULL) {
     sass_option_set_include_path(opts, this->include_paths);
     }
@@ -399,6 +402,35 @@ PHP_METHOD(Sass, setComments)
 }
 
 
+PHP_METHOD(Sass, getIndent)
+{
+    zval *this = getThis();
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "", NULL) == FAILURE) {
+        RETURN_FALSE;
+    }
+
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    RETURN_LONG(obj->indent);
+}
+
+PHP_METHOD(Sass, setIndent)
+{
+    zval *this = getThis();
+
+    bool new_indent;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &new_indent) == FAILURE) {
+        RETURN_FALSE;
+    }
+
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    obj->indent = new_indent;
+
+    RETURN_NULL();
+}
+
+
 PHP_METHOD(Sass, getLibraryVersion)
 {
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "", NULL) == FAILURE) {
@@ -447,6 +479,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_sass_setComments, 0, 0, 1)
     ZEND_ARG_INFO(0, comments)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_sass_setIndent, 0, 0, 1)
+    ZEND_ARG_INFO(0, indent)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_sass_setEmbed, 0, 0, 1)
     ZEND_ARG_INFO(0, map_embed)
 ZEND_END_ARG_INFO()
@@ -468,8 +504,10 @@ zend_function_entry sass_methods[] = {
     PHP_ME(Sass,  setPrecision,      arginfo_sass_setPrecision,   ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getComments,       arginfo_sass_void,           ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  setComments,       arginfo_sass_setComments,    ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  getIndent,         arginfo_sass_void,           ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  setIndent,         arginfo_sass_setIndent,      ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getEmbed,          arginfo_sass_void,           ZEND_ACC_PUBLIC)
-    PHP_ME(Sass,  setEmbed,          arginfo_sass_setComments,    ZEND_ACC_PUBLIC)
+    PHP_ME(Sass,  setEmbed,          arginfo_sass_setEmbed,       ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getMapPath,        arginfo_sass_void,           ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  setMapPath,        arginfo_sass_setMapPath,     ZEND_ACC_PUBLIC)
     PHP_ME(Sass,  getLibraryVersion, arginfo_sass_void,           ZEND_ACC_PUBLIC | ZEND_ACC_STATIC)
