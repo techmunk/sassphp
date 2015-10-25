@@ -134,7 +134,7 @@ If there's a problem, the extension will throw a `SassException`:
 
 These extensions also conform to LibSass 3.2.5 & remain in varying states of completion
 
-* Facebook [HHVM](https://github.com/absalomedia/hhvm) extension
+* Facebook [HHVM](https://github.com/absalomedia/sasshhvm) extension
 * [Nginx](https://github.com/absalomedia/sass-nginx-module) module
 
 ## Changelog
