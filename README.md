@@ -91,6 +91,12 @@ Aliases also exist so you can also use:
 
     $css = $sass->compile_file($source);
 
+You can tell the compiler to use indented syntax (SASS syntax). By default it expects SCSS syntax:
+
+    $sass = new Sass();
+    $sass->setIndent(true); //TRUE -> SASS, FALSE -> SCSS
+    $css = $sass->compile($source);
+
 You can set the source map file for the library to use:
 
     $sass = new Sass();
@@ -124,18 +130,25 @@ If there's a problem, the extension will throw a `SassException`:
 
 * The file_comments test will fail as it remains unable to figure out the path the test has been run in. It generates the output successfully
 
+## Variant builds
 
-## Forward planning
+These extensions also conform to LibSass 3.2.5 & remain in varying states of completion
 
-* HHVM Zend compatibility?
-* Nginx extension?
+* Facebook [HHVM](https://github.com/absalomedia/hhvm) extension
+* [Nginx](https://github.com/absalomedia/sass-nginx-module) module
 
 ## Changelog
 
-** Version 0.4.5 
+** Version 0.4.7
+* SCSS vs SASS detection - indents
+
+** Version 0.4.6
+* Travis experimental
+
+** Version 0.4.5
 * Holiday Patch (Libsass 3.2.5) stable
 
-** Version 0.4.4 
+** Version 0.4.4
 * Refactor correctly for LibSass 3.2.4
 
 ** Version 0.4.2
