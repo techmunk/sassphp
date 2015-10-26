@@ -21,7 +21,7 @@
 #include <Zend/zend_extensions.h>
 #include <Zend/zend_exceptions.h>
 
-#include <lib/libsass/include/sass/context.h>
+#include <lib/libsass/include/sass.h>
 
 zend_class_entry *sass_ce;
 zend_class_entry *sass_exception_ce;
