@@ -7,7 +7,7 @@ correctly handles setting and getting source embedding
 
 $sass = new Sass();
 // test default from constructor
-echo $sass->getComments();
+echo $sass->getEmbed();
 
 // test SASS_SOURCE_NONE
 $sass->setEmbed(false);
