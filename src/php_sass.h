@@ -13,7 +13,7 @@
 #include "config.h"
 #endif
 
-#define SASS_VERSION "0.4.7"
+#define SASS_VERSION "0.4.8"
 #define SASS_FLAVOR  "Sassyphpras"
 
 #include <php.h>
@@ -21,7 +21,7 @@
 #include <Zend/zend_extensions.h>
 #include <Zend/zend_exceptions.h>
 
-#include <lib/libsass/include/sass.h>
+#include <sass.h>
 
 zend_class_entry *sass_ce;
 zend_class_entry *sass_exception_ce;

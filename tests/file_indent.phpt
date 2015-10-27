@@ -7,7 +7,7 @@ compiles SASS file in comparison to SCSS based SASS file
 
 $sass = new Sass();
 $sass->setIndent(true);
-$css = $sass->compileFile(__DIR__.'/support/minix.sass');
+$css = $sass->compileFile(__DIR__.'/support/mixin.sass');
 echo $css;
 
 

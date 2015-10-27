@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 #include "php_sass.h"
-#include <utilities.h>
+#include "utilities.h"
 
 /* --------------------------------------------------------------
  * Sass
