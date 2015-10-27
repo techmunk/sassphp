@@ -13,4 +13,11 @@ echo $css;
 
 ?>
 --EXPECT--
+@import url(../blahblah/blah.blah);
+div {
+  blah: "hello 4 world px bloo blah"; }
+
+div {
+  blah: "foo iphone"; }
+
 /*# sourceMappingURL=data:application/json;base64,ewoJInZlcnNpb24iOiAzLAoJImZpbGUiOiAidGVzdHMvc3VwcG9ydC90ZXN0LmNzcyIsCgkic291cmNlcyI6IFsKCQkidGVzdHMvc3VwcG9ydC90ZXN0LnNjc3MiCgldLAoJIm1hcHBpbmdzIjogIkFBQUEsT0FBTyxDQUFDLDBCQUFJO0FBRVosR0FBRyxDQUFDO0VBQ0YsSUFBSSxFQUFFLDRCQUFpRCxHQUN4RDs7QUFJRCxHQUFHLENBQUM7RUFDQSxJQUFJLEVBQUUsWUFBYSxHQUN0QiIsCgkibmFtZXMiOiBbXQp9 */
