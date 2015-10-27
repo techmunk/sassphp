@@ -132,12 +132,15 @@ If there's a problem, the extension will throw a `SassException`:
 
 ## Variant builds
 
-These extensions also conform to LibSass 3.2.5 & remain in varying states of completion
+These extensions also utilise Libsass & remain in varying states of completion
 
-* Facebook [HHVM](https://github.com/absalomedia/sasshhvm) extension
-* [Nginx](https://github.com/absalomedia/sass-nginx-module) module
+* Facebook [HHVM](https://github.com/absalomedia/sasshhvm) extension - with Libsass 3.3.0 - stable
+* [Nginx](https://github.com/absalomedia/sass-nginx-module) module - with Libsass 3.2.5 - unstable
 
 ## Changelog
+
+** Version 0.4.8
+* Greased Lightning (Libsass 3.3.0) stable
 
 ** Version 0.4.7
 * SCSS vs SASS detection - indents
