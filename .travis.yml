@@ -12,6 +12,8 @@ env:
     - TEST_PHP_ARGS="-q -s output.txt -g XFAIL,FAIL,BORK,WARN,LEAK,SKIP -x --show-diff"
     # Add the pip installation folder to the PATH, until https://github.com/travis-ci/travis-ci/issues/3563 is fixed
     - PATH=$HOME/.local/bin:$PATH
+    - setup=basic
+    - coverage=no
 
 addons:
     code_climate:
@@ -36,6 +38,14 @@ before_install:
   - git submodule init
   - git submodule update
 
+before_script:
+  - travis_retry composer self-update
+  - composer config discard-changes true
+  - if [[ $setup = 'basic' ]]; then travis_retry composer install --prefer-source --no-interaction; fi
+  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-stable; fi
+  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-lowest --prefer-stable; fi
+  - if [[ $setup = 'coveralls' ]]; then travis_retry composer require "psr/log=1.0.0" "satooshi/php-coveralls=~0.6" "symfony/yaml=~2.0" --prefer-source --no-interaction --dev; fi
+
 
 script:
   - make clean
@@ -48,7 +58,11 @@ script:
   - make install
   - mkdir -p build/logs
   - make test
-  - phpunit -c phpunit.xml --coverage-clover build/logs/clover.xml
+  - if [[ $coverage = 'yes' ]]; then phpunit -c phpunit.xml --coverage-clover build/logs/clover.xml; fi
+  - if [[ $coverage = 'no' ]]; then phpunit -c phpunit.xml; fi
+
+after_script:
+  - if [[ $setup = 'coveralls' ]]; then php vendor/bin/coveralls -v; fi
 
 notifications:
     on_success: never
@@ -56,3 +70,13 @@ notifications:
 
 os:
   - linux
+
+matrix:
+  include:
+    - php: 5.5
+      env: setup=lowest
+    - php: 5.5
+      env: setup=stable
+    - php: 5.5
+      env: setup=coveralls coverage=yes
+  fast_finish: true
