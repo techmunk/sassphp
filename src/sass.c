@@ -437,7 +437,7 @@ PHP_METHOD(Sass, getLibraryVersion)
         RETURN_FALSE;
     }
 
-    RETURN_STRING(libsass_version(), 1)
+    RETURN_STRING(libsass_version(), 1);
 }
 /* --------------------------------------------------------------
  * EXCEPTION HANDLING
