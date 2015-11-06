@@ -54,9 +54,10 @@ void sass_free_storage(void *object TSRMLS_DC)
     efree(obj);
 }
 
+#if ZEND_MODULE_API_NO <= 20131226
 zend_object_value sass_create_handler(zend_class_entry *type TSRMLS_DC)
 {
-    #if ZEND_MODULE_API_NO <= 20131226
+
     zval *tmp;
     zend_object_value retval;
 
@@ -76,10 +77,11 @@ zend_object_value sass_create_handler(zend_class_entry *type TSRMLS_DC)
     retval.handlers = &sass_handlers;
 
     return retval;
-    
-    #endif
+}    
+#endif
 
-    #if ZEND_MODULE_API_NO > 20131226
+#if ZEND_MODULE_API_NO > 20131226
+zend_object * sass_create_handler(zend_class_entry *type TSRMLS_DC) {
     struct sass_object *intern = ecalloc(1, 
          sizeof(struct sass_object) + 
          zend_object_properties_size(type));
@@ -91,23 +93,20 @@ zend_object_value sass_create_handler(zend_class_entry *type TSRMLS_DC)
      intern->zo.handlers = sass_object_handlers;
  
      return &intern->zo;
-    #endif
 }
 
-#if ZEND_MODULE_API_NO > 20131226
-/**
- * PHP7 sass object creation
- */
- 
+
 static inline struct sass_object * php_custom_object_fetch_object(zend_object *obj) {
       return (struct sass_object *)((char *)obj - XtOffsetOf(struct sass_object, zo));
 }
  
-#define Z_CUSTOM_OBJ_P(zv) php_custom_object_fetch_object(Z_OBJ_P(zv));
+    #define Z_CUSTOM_OBJ_P(zv) php_custom_object_fetch_object(Z_OBJ_P(zv));
  
-struct sass_object* obj = Z_CUSTOM_OBJ_P(getThis());
+    struct sass_object* obj = Z_CUSTOM_OBJ_P(getThis());
 
-#endif
+    #endif
+
+#endif 
 
 PHP_METHOD(Sass, __construct)
 {
