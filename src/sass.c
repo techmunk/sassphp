@@ -88,7 +88,7 @@ zend_object * sass_create_handler(zend_class_entry *type TSRMLS_DC) {
      sass_handlers.offset = XtOffsetOf(struct sass_object, zo);
      sass_handlers.free_obj = sass_free_storage;
  
-     intern->zo.handlers = sass_handlers;
+     intern->zo.handlers = &sass_handlers;
  
      return &intern->zo;
 }
@@ -160,7 +160,7 @@ void set_options(sass_object *this, struct Sass_Context *ctx)
 PHP_METHOD(Sass, compile)
 {
 
-    sass_object *this = (&sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+    sass_object *this = &(sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
     // We need a file name and a length
     #if ZEND_MODULE_API_NO <= 20131226
@@ -226,7 +226,7 @@ PHP_METHOD(Sass, compile)
 PHP_METHOD(Sass, compileFile)
 {
     array_init(return_value);
-    sass_object *this = (&sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
+    sass_object *this = &(sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
     // We need a file name and a length
     #if ZEND_MODULE_API_NO <= 20131226
@@ -334,7 +334,7 @@ PHP_METHOD(Sass, getStyle)
         RETURN_FALSE;
     }
 
-    sass_object *obj = (&sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    sass_object *obj = &(sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     RETURN_LONG(obj->style);
 }
 
