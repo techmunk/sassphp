@@ -85,8 +85,8 @@ zend_object_value sass_create_handler(zend_class_entry *type TSRMLS_DC)
          zend_object_properties_size(type));
 
      zend_object_std_init(&intern->zo, type TSRMLS_CC);
-     custom_object_handlers.offset = XtOffsetOf(struct custom_obj, zo);
-     custom_object_handlers.free_obj = sass_free_storage;
+     sass_object_handlers.offset = XtOffsetOf(struct custom_obj, zo);
+     sass_object_handlers.free_obj = sass_free_storage;
  
      intern->zo.handlers = sass_object_handlers;
  
