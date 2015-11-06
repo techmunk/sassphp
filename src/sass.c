@@ -224,7 +224,12 @@ PHP_METHOD(Sass, compileFile)
     #endif
 
     // First, do a little checking of our own. Does the file exist?
+    #if ZEND_MODULE_API_NO <= 20131226
     if( access( file, F_OK ) == -1 )
+    #endif
+     #if ZEND_MODULE_API_NO > 20131226
+    if( access( file->val, F_OK ) == -1 )
+    #endif    
     {
         zend_throw_exception_ex(sass_exception_ce, 0 TSRMLS_CC, "File %s could not be found", file);
         RETURN_FALSE;
