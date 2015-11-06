@@ -82,12 +82,12 @@ zend_object_value sass_create_handler(zend_class_entry *type TSRMLS_DC)
          zend_object_properties_size(ce));
 
      zend_object_std_init(&intern->std, ce TSRMLS_CC);
-     custom_object_handlers.offset = XtOffsetOf(struct custom_obj, std);
+     custom_object_handlers.offset = XtOffsetOf(struct custom_obj, zo);
      custom_object_handlers.free_obj = custom_free_storage;
  
      intern->std.handlers = custom_object_handlers;
  
-     return &intern->std;
+     return &intern->zo;
     #endif
 }
 
@@ -97,7 +97,7 @@ zend_object_value sass_create_handler(zend_class_entry *type TSRMLS_DC)
  */
  
 static inline struct sass_object * php_custom_object_fetch_object(zend_object *obj) {
-      return (struct  sass_object *)((char *)obj - XtOffsetOf(struct sass_object, std));
+      return (struct sass_object *)((char *)obj - XtOffsetOf(struct sass_object, zo));
 }
  
 #define Z_CUSTOM_OBJ_P(zv) php_custom_object_fetch_object(Z_OBJ_P(zv));
