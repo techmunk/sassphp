@@ -263,7 +263,7 @@ PHP_METHOD(Sass, getIncludePath)
 
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     if (obj->include_paths == NULL) RETURN_STRING("", 1)
-    RETURN_STRING(obj->include_paths, 1)
+    RETURN_STRING(obj->include_paths, 1);
 }
 
 PHP_METHOD(Sass, setIncludePath)
@@ -294,7 +294,7 @@ PHP_METHOD(Sass, getMapPath)
 
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     if (obj->map_path == NULL) RETURN_STRING("", 1)
-    RETURN_STRING(obj->map_path, 1)
+    RETURN_STRING(obj->map_path, 1);
 }
 
 PHP_METHOD(Sass, setMapPath)
