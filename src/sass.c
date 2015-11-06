@@ -134,6 +134,8 @@ PHP_METHOD(Sass, compile)
 
     sass_object *this = (sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
+    // We need a file name and a length
+    #if ZEND_MODULE_API_NO <= 20131226
     // Define our parameters as local variables
     char *source;
     int source_len;
@@ -142,6 +144,18 @@ PHP_METHOD(Sass, compile)
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &source, &source_len) == FAILURE){
         RETURN_FALSE;
     }
+    #endif
+
+    // We need a file name and a length
+    #if ZEND_MODULE_API_NO > 20131226
+    // Define our parameters as local variables
+    zend_string *source;
+
+    // Use zend_parse_parameters() to grab our source from the function call
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &source) == FAILURE){
+        RETURN_FALSE;
+    }
+    #endif
 
     // Create a new sass_context
     struct Sass_Data_Context* data_context = sass_make_data_context(strdup(source));
@@ -158,7 +172,12 @@ PHP_METHOD(Sass, compile)
     }
     else
     {
+        #if ZEND_MODULE_API_NO <= 20131226
         RETVAL_STRING(sass_context_get_output_string(ctx), 1);
+        #endif
+        #if ZEND_MODULE_API_NO > 20131226
+        RETVAL_STRING(sass_context_get_output_string(ctx));
+        #endif
     }
 
     sass_delete_data_context(data_context);
@@ -175,6 +194,7 @@ PHP_METHOD(Sass, compileFile)
     sass_object *this = (sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
     // We need a file name and a length
+    #if ZEND_MODULE_API_NO <= 20131226
     char *file;
     int file_len;
 
@@ -183,6 +203,18 @@ PHP_METHOD(Sass, compileFile)
     {
         RETURN_FALSE;
     }
+    #endif
+
+    // We need a file name and a length
+    #if ZEND_MODULE_API_NO > 20131226
+    zend_string *file;
+
+    // Grab the file name from the function
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &file) == FAILURE)
+    {
+        RETURN_FALSE;
+    }
+    #endif
 
     // First, do a little checking of our own. Does the file exist?
     if( access( file, F_OK ) == -1 )
@@ -206,7 +238,8 @@ PHP_METHOD(Sass, compileFile)
     }
     else
     {
-
+        
+        #if ZEND_MODULE_API_NO <= 20131226
         if (this->map_path != NULL ) {
         // Send it over to PHP.
         add_next_index_string(return_value, sass_context_get_output_string(ctx), 1);
@@ -220,6 +253,23 @@ PHP_METHOD(Sass, compileFile)
          // Send it over to PHP.
          add_next_index_string(return_value, sass_context_get_source_map_string(ctx), 1);
          }
+         #endif
+
+        #if ZEND_MODULE_API_NO > 20131226
+        if (this->map_path != NULL ) {
+        // Send it over to PHP.
+        add_next_index_string(return_value, sass_context_get_output_string(ctx));
+        } else {
+        RETVAL_STRING(sass_context_get_output_string(ctx));
+        }
+
+         // Do we have source maps to go?
+         if (this->map_path != NULL)
+         {
+         // Send it over to PHP.
+         add_next_index_string(return_value, sass_context_get_source_map_string(ctx));
+         }
+         #endif
     }
 
     sass_delete_file_context(file_ctx);
