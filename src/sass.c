@@ -104,13 +104,13 @@ static inline struct sass_object * php_custom_object_fetch_object(zend_object *o
 
 PHP_METHOD(Sass, __construct)
 {
-    zval *this = getThis();
+    zval *this = getThis(sass_object *);
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "", NULL) == FAILURE) {
         RETURN_NULL();
     }
 
-    sass_object *obj = uintptr_t((sass_object *)zend_object_store_get_object(this TSRMLS_CC));
+    sass_object *obj = (intptr_t)zend_object_store_get_object(this TSRMLS_CC);
     obj->style = SASS_STYLE_NESTED;
     obj->include_paths = NULL;
     obj->map_path = NULL;
