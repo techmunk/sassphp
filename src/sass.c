@@ -12,7 +12,7 @@
 #if ZEND_MODULE_API_NO > 20131226
 #include <stdlib.h>.
 #endif
- 
+
 #include "php_sass.h"
 #include "utilities.h"
 
@@ -86,9 +86,9 @@ zend_object_value sass_create_handler(zend_class_entry *type TSRMLS_DC)
 
      zend_object_std_init(&intern->zo, type TSRMLS_CC);
      custom_object_handlers.offset = XtOffsetOf(struct custom_obj, zo);
-     custom_object_handlers.free_obj = custom_free_storage;
+     custom_object_handlers.free_obj = sass_free_storage;
  
-     intern->std.handlers = custom_object_handlers;
+     intern->zo.handlers = sass_object_handlers;
  
      return &intern->zo;
     #endif
