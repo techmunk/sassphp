@@ -325,8 +325,15 @@ PHP_METHOD(Sass, getIncludePath)
     }
 
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    #if ZEND_MODULE_API_NO <= 20131226
     if (obj->include_paths == NULL) RETURN_STRING("", 1);
     RETURN_STRING(obj->include_paths, 1);
+    #endif
+
+    #if ZEND_MODULE_API_NO > 20131226
+    if (obj->include_paths == NULL) RETURN_STRING("");
+    RETURN_STRING(obj->include_paths);
+    #endif
 }
 
 PHP_METHOD(Sass, setIncludePath)
@@ -356,8 +363,15 @@ PHP_METHOD(Sass, getMapPath)
     }
 
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
+    #if ZEND_MODULE_API_NO <= 20131226
     if (obj->map_path == NULL) RETURN_STRING("", 1);
     RETURN_STRING(obj->map_path, 1);
+    #endif
+
+    #if ZEND_MODULE_API_NO > 20131226
+    if (obj->map_path == NULL) RETURN_STRING("");
+    RETURN_STRING(obj->map_path);
+    #endif
 }
 
 PHP_METHOD(Sass, setMapPath)
@@ -500,7 +514,14 @@ PHP_METHOD(Sass, getLibraryVersion)
         RETURN_FALSE;
     }
 
+    #if ZEND_MODULE_API_NO <= 20131226
     RETURN_STRING(libsass_version(), 1);
+    #endif
+
+    #if ZEND_MODULE_API_NO > 20131226
+    RETURN_STRING(libsass_version());
+    #endif
+    
 }
 /* --------------------------------------------------------------
  * EXCEPTION HANDLING
