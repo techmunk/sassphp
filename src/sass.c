@@ -158,7 +158,14 @@ PHP_METHOD(Sass, compile)
     #endif
 
     // Create a new sass_context
+    #if ZEND_MODULE_API_NO <= 20131226
     struct Sass_Data_Context* data_context = sass_make_data_context(strdup(source));
+    #endif
+
+    #if ZEND_MODULE_API_NO > 20131226
+    struct Sass_Data_Context* data_context = sass_make_data_context(strdup(source->val));
+    #endif
+
     struct Sass_Context* ctx = sass_data_context_get_context(data_context);
 
     set_options(this, ctx);
@@ -224,7 +231,13 @@ PHP_METHOD(Sass, compileFile)
     }
 
     // Create a new sass_file_context
+    #if ZEND_MODULE_API_NO <= 20131226
     struct Sass_File_Context* file_ctx = sass_make_file_context(file);
+    #endif
+    #if ZEND_MODULE_API_NO > 20131226
+    struct Sass_File_Context* file_ctx = sass_make_file_context(file->val);
+    #endif
+
     struct Sass_Context* ctx = sass_file_context_get_context(file_ctx);
 
     set_options(this, ctx);
