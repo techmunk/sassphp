@@ -649,6 +649,9 @@ static PHP_MINIT_FUNCTION(sass)
     sass_ce->create_object = sass_create_handler;
 
     memcpy(&sass_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_handlers.offset = XtOffsetOf(sass_ce, ce);
+    #endif
     sass_handlers.clone_obj = NULL;
 
     INIT_CLASS_ENTRY(exception_ce, "SassException", NULL);
