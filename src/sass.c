@@ -110,7 +110,7 @@ PHP_METHOD(Sass, __construct)
         RETURN_NULL();
     }
 
-    sass_object *obj = (sass_object *) uintptr_t(zend_object_store_get_object(this TSRMLS_CC));
+    sass_object *obj = uintptr_t((sass_object *)zend_object_store_get_object(this TSRMLS_CC));
     obj->style = SASS_STYLE_NESTED;
     obj->include_paths = NULL;
     obj->map_path = NULL;
