@@ -6,7 +6,7 @@ The `sass` extension for PHP gives you an object-oriented system of parsing [Sas
 
 Sass is a CSS pre-processor language to add on exciting, new, awesome features to CSS. Sass was the first language of its kind and by far the most mature and up to date codebase.
 
-Sass was originally created by Hampton Catlin ([@hcatlin](http://twitter.com/hcatlin)). The extension and continuing evolution of the language has all been the result of years of work by Natalie Weizenbaum ([@nex4](http://twitter.com/nex4)) and Chris Eppstein ([@chriseppstein](http://twitter.com/chriseppstein)).
+Sass was originally created by Hampton Catlin ([@hcatlin](http://twitter.com/hcatlin)). The extension and continuing evolution of the language has all been the result of years of work by Natalie Weizenbaum ([@nex3](http://twitter.com/nex3)) and Chris Eppstein ([@chriseppstein](http://twitter.com/chriseppstein)).
 
 For more information about Sass itself, please visit [http://sass-lang.com](http://sass-lang.com)
 
@@ -71,17 +71,20 @@ You can set the style of your SASS file to suit your needs:
     $sass = new Sass();
     $sass->setStyle(Sass::STYLE_COMPRESSED);
 
-The new additions to this build from the [Sensational](https://github.com/sensational/sassphp) codebase are:
-* Camel case rename of `compile_file` to `compileFile`
-* SASS file compilation is now an array when a source map is enabled. Otherwise, as per normal, it's a string.
+As the [Libsass](https://github.com/hcatlin/libsass) library has matured to get closer to 100% SASS coverage, so this extension has also matured:
+* SASS file compilation is an array when a source map file is specified.
 * The ability to define source comments
+* The ability to embed the source map into the CSS output
+* The ability to specify .SASS file input instead of .SCSS
 * The ability to set a source map path, required when generating a dedicated .map file
+* The ability to define a root directory for the source map itself
+* PHP 5.4 to PHP 7.1 (nightly) support
 
-It also reports itself as the `Sassyphpras` version of the Apache SASS module to help differentiate builds.
+The output of `compileFile()` is an array when creating source map files, allowing both compiled SASS file and .map file to be generated in the same function call.
 
-The output of `compileFile()` is now an array instead of a string, allowing both compiled SASS file and .map file to be generated in the same function call. As there are multiple ways of generating source comments, there are now PHP level settings to control that output.
+As there are multiple ways of generating source comments, there are now PHP level settings to control that output.
 
-To generate source comments for a file inline - now in camelCase:
+To generate source comments for a file inline:
 
     $sass = new Sass();
     $sass->setComments(true);
@@ -97,6 +100,12 @@ You can tell the compiler to use indented syntax (SASS syntax). By default it ex
     $sass->setIndent(true); //TRUE -> SASS, FALSE -> SCSS
     $css = $sass->compile($source);
 
+You can tell the compiler to embed the source map into the actual CSS file as well:
+
+    $sass = new Sass();
+    $sass->setEmbed(true);
+    $css = $sass->compile($source);
+
 You can set the source map file for the library to use:
 
     $sass = new Sass();
@@ -110,6 +119,13 @@ The first array item will always be the compiled SASS file:
 
 The second array item will always be the source map output:
     $css[1]
+
+You can set the root of the generated source map file like so:
+
+    $sass = new Sass();
+    $sass->setMapRoot('/some/dir');
+    $sass->setMapPath('/random.output.css.map');
+    $css = $sass->compileFile($source);
 
 If there's a problem, the extension will throw a `SassException`:
 
@@ -132,10 +148,10 @@ If there's a problem, the extension will throw a `SassException`:
 
 ## Variant builds
 
-These extensions also utilise Libsass & remain in varying states of completion
+These extensions also utilise the [Libsass](https://github.com/hcatlin/libsass) library & remain in varying states of completion:
 
-* Facebook [HHVM](https://github.com/absalomedia/sasshhvm) extension - with Libsass 3.3.0 - stable
-* [Nginx](https://github.com/absalomedia/sass-nginx-module) module - with Libsass 3.2.5 - unstable
+* Facebook [HHVM](https://github.com/absalomedia/sasshhvm) native (non Zend) extension - with Libsass 3.3.1 - stable - tested up to HHVM 3.10.x
+* [Nginx](https://github.com/absalomedia/sass-nginx-module) module - with Libsass 3.3.1 - unstable
 
 ## Changelog
 
@@ -152,7 +168,7 @@ These extensions also utilise Libsass & remain in varying states of completion
 * SCSS vs SASS detection - indents
 
 ** Version 0.4.6
-* Travis experimental
+* Travis experimental (unreleased)
 
 ** Version 0.4.5
 * Holiday Patch (Libsass 3.2.5) stable
