@@ -110,8 +110,7 @@ PHP_METHOD(Sass, __construct)
         RETURN_NULL();
     }
 
-    sass_object *obj = set_object(this);
-
+    sass_object *obj = (sass_object *)(uintptr_t)zend_object_store_get_object(this TSRMLS_CC);
     obj->style = SASS_STYLE_NESTED;
     obj->include_paths = NULL;
     obj->map_path = NULL;
@@ -153,16 +152,6 @@ void set_options(sass_object *this, struct Sass_Context *ctx)
 
 }
 
-void set_object(sass_object *this)
- {
-    #if ZEND_MODULE_API_NO >= 20131226
-    sass_object *this = (sass_object *)(uintptr_t)zend_object_store_get_object(this TSRMLS_CC);
-    #endif
-    #if ZEND_MODULE_API_NO < 20131226
-    sass_object *this = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
-    #endif
-
- }
 /**
  * $sass->parse(string $source, [  ]);
  *
@@ -170,8 +159,8 @@ void set_object(sass_object *this)
  */
 PHP_METHOD(Sass, compile)
 {
-    zval *this = getThis();
-    set_object(this);
+
+    sass_object *this = (sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
     // We need a file name and a length
     #if ZEND_MODULE_API_NO <= 20131226
@@ -237,8 +226,7 @@ PHP_METHOD(Sass, compile)
 PHP_METHOD(Sass, compileFile)
 {
     array_init(return_value);
-
-    set_object(this);
+    sass_object *this = (sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
 
     // We need a file name and a length
     #if ZEND_MODULE_API_NO <= 20131226
@@ -346,7 +334,7 @@ PHP_METHOD(Sass, getStyle)
         RETURN_FALSE;
     }
 
-    sass_object *obj = set_object(this);
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     RETURN_LONG(obj->style);
 }
 
@@ -360,7 +348,7 @@ PHP_METHOD(Sass, setStyle)
         RETURN_FALSE;
     }
 
-    sass_object *obj = set_object(this);
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     obj->style = new_style;
 
     RETURN_NULL();
@@ -374,7 +362,7 @@ PHP_METHOD(Sass, getIncludePath)
         RETURN_FALSE;
     }
 
-    sass_object *obj = set_object(this);
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     #if ZEND_MODULE_API_NO <= 20131226
     if (obj->include_paths == NULL) RETURN_STRING("", 1);
     RETURN_STRING(obj->include_paths, 1);
@@ -396,7 +384,7 @@ PHP_METHOD(Sass, setIncludePath)
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len) == FAILURE)
         RETURN_FALSE;
 
-    sass_object *obj = set_object(this);
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     if (obj->include_paths != NULL)
         efree(obj->include_paths);
     obj->include_paths = estrndup(path, path_len);
@@ -412,7 +400,7 @@ PHP_METHOD(Sass, getMapPath)
         RETURN_FALSE;
     }
 
-    sass_object *obj = set_object(this);
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     #if ZEND_MODULE_API_NO <= 20131226
     if (obj->map_path == NULL) RETURN_STRING("", 1);
     RETURN_STRING(obj->map_path, 1);
@@ -434,7 +422,7 @@ PHP_METHOD(Sass, setMapPath)
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len) == FAILURE)
         RETURN_FALSE;
 
-    sass_object *obj = set_object(this);
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     if (obj->map_path != NULL)
         efree(obj->map_path);
     obj->map_path = estrndup(path, path_len);
@@ -451,7 +439,7 @@ PHP_METHOD(Sass, getPrecision)
         RETURN_FALSE;
     }
 
-    sass_object *obj = set_object(this);
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     RETURN_LONG(obj->precision);
 }
 
@@ -465,7 +453,7 @@ PHP_METHOD(Sass, setPrecision)
         RETURN_FALSE;
     }
 
-    sass_object *obj = set_object(this);
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     obj->precision = new_precision;
 
     RETURN_NULL();
@@ -479,7 +467,7 @@ PHP_METHOD(Sass, getEmbed)
         RETURN_FALSE;
     }
 
-    sass_object *obj = set_object(this);
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     RETURN_LONG(obj->map_embed);
 }
 
@@ -493,7 +481,7 @@ PHP_METHOD(Sass, setEmbed)
         RETURN_FALSE;
     }
 
-    sass_object *obj = set_object(this);
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     obj->map_embed = new_map_embed;
 
     RETURN_NULL();
@@ -508,7 +496,7 @@ PHP_METHOD(Sass, getComments)
         RETURN_FALSE;
     }
 
-    sass_object *obj = set_object(this);
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     RETURN_LONG(obj->comments);
 }
 
@@ -522,7 +510,7 @@ PHP_METHOD(Sass, setComments)
         RETURN_FALSE;
     }
 
-    sass_object *obj = set_object(this);
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     obj->comments = new_comments;
 
     RETURN_NULL();
@@ -537,7 +525,7 @@ PHP_METHOD(Sass, getIndent)
         RETURN_FALSE;
     }
 
-    sass_object *obj = set_object(this);
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     RETURN_LONG(obj->indent);
 }
 
@@ -551,7 +539,7 @@ PHP_METHOD(Sass, setIndent)
         RETURN_FALSE;
     }
 
-    sass_object *obj = set_object(this);
+    sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     obj->indent = new_indent;
 
     RETURN_NULL();
