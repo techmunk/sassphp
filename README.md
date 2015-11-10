@@ -139,6 +139,12 @@ These extensions also utilise Libsass & remain in varying states of completion
 
 ## Changelog
 
+** Version 0.5
+*  PHP 7 compatibility
+
+** Version 0.4.9
+* Too Fast To Furious (Libsass 3.3.1) stable
+
 ** Version 0.4.8
 * Greased Lightning (Libsass 3.3.0) stable
 
