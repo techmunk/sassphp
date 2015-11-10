@@ -97,6 +97,8 @@ static inline struct sass_object * php_custom_object_fetch_object(zend_object *o
       return (struct sass_object *)((char *)obj - XtOffsetOf(struct sass_object, zo));
 }
 
+#define Z_CUSTOM_OBJ_P(zv) php_custom_object_fetch_object(Z_OBJ_P(zv));
+
   struct sass_object* obj = Z_CUSTOM_OBJ_P(getThis());
 
 #endif
