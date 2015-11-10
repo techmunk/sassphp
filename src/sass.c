@@ -102,11 +102,11 @@ PHP_METHOD(Sass, __construct)
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "", NULL) == FAILURE) {
         RETURN_NULL();
     }
-    #if ZEND_MODULE_API_NO >= 20131226
-    sass_object *obj = (sass_object *)(uintptr_t)zend_object_store_get_object(this TSRMLS_CC);
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_object *obj = Z_MEMC_OBJ_P(this);
     #endif
 
-    #if ZEND_MODULE_API_NO < 20131226
+    #if ZEND_MODULE_API_NO <= 20131226
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     #endif
 
@@ -158,11 +158,11 @@ void set_options(sass_object *this, struct Sass_Context *ctx)
  */
 PHP_METHOD(Sass, compile)
 {
-    #if ZEND_MODULE_API_NO >= 20131226
-    sass_object *this = (sass_object *)(uintptr_t)zend_object_store_get_object(getThis() TSRMLS_CC);
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_object *this = Z_MEMC_OBJ_P(getThis());
     #endif
 
-    #if ZEND_MODULE_API_NO < 20131226
+    #if ZEND_MODULE_API_NO <= 20131226
     sass_object *this = (sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
     #endif
 
@@ -231,11 +231,11 @@ PHP_METHOD(Sass, compileFile)
 {
     array_init(return_value);
 
-    #if ZEND_MODULE_API_NO >= 20131226
-    sass_object *this = (sass_object *)(uintptr_t)zend_object_store_get_object(getThis() TSRMLS_CC);
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_object *this = Z_MEMC_OBJ_P(getThis());
     #endif
 
-    #if ZEND_MODULE_API_NO < 20131226
+    #if ZEND_MODULE_API_NO <= 20131226
     sass_object *this = (sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
     #endif
 
@@ -345,10 +345,10 @@ PHP_METHOD(Sass, getStyle)
         RETURN_FALSE;
     }
 
-    #if ZEND_MODULE_API_NO >= 20131226
-    sass_object *obj = (sass_object *)(uintptr_t)zend_object_store_get_object(this TSRMLS_CC);
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_object *obj = Z_MEMC_OBJ_P(this);
     #endif
-    #if ZEND_MODULE_API_NO < 20131226
+    #if ZEND_MODULE_API_NO <= 20131226
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     #endif 
 
@@ -365,10 +365,10 @@ PHP_METHOD(Sass, setStyle)
         RETURN_FALSE;
     }
 
-    #if ZEND_MODULE_API_NO >= 20131226
-    sass_object *obj = (sass_object *)(uintptr_t)zend_object_store_get_object(this TSRMLS_CC);
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_object *obj = Z_MEMC_OBJ_P(this);
     #endif
-    #if ZEND_MODULE_API_NO < 20131226
+    #if ZEND_MODULE_API_NO <= 20131226
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     #endif 
     obj->style = new_style;
@@ -384,12 +384,12 @@ PHP_METHOD(Sass, getIncludePath)
         RETURN_FALSE;
     }
 
-    #if ZEND_MODULE_API_NO >= 20131226
-    sass_object *obj = (sass_object *)(uintptr_t)zend_object_store_get_object(this TSRMLS_CC);
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_object *obj = Z_MEMC_OBJ_P(this);
     #endif
-    #if ZEND_MODULE_API_NO < 20131226
+    #if ZEND_MODULE_API_NO <= 20131226
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
-    #endif 
+    #endif  
 
     #if ZEND_MODULE_API_NO <= 20131226
     if (obj->include_paths == NULL) RETURN_STRING("", 1);
@@ -412,12 +412,12 @@ PHP_METHOD(Sass, setIncludePath)
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len) == FAILURE)
         RETURN_FALSE;
 
-    #if ZEND_MODULE_API_NO >= 20131226
-    sass_object *obj = (sass_object *)(uintptr_t)zend_object_store_get_object(this TSRMLS_CC);
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_object *obj = Z_MEMC_OBJ_P(this);
     #endif
-    #if ZEND_MODULE_API_NO < 20131226
+    #if ZEND_MODULE_API_NO <= 20131226
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
-    #endif 
+    #endif  
 
     if (obj->include_paths != NULL)
         efree(obj->include_paths);
@@ -434,12 +434,12 @@ PHP_METHOD(Sass, getMapPath)
         RETURN_FALSE;
     }
 
-    #if ZEND_MODULE_API_NO >= 20131226
-    sass_object *obj = (sass_object *)(uintptr_t)zend_object_store_get_object(this TSRMLS_CC);
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_object *obj = Z_MEMC_OBJ_P(this);
     #endif
-    #if ZEND_MODULE_API_NO < 20131226
+    #if ZEND_MODULE_API_NO <= 20131226
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
-    #endif 
+    #endif  
 
     #if ZEND_MODULE_API_NO <= 20131226
     if (obj->map_path == NULL) RETURN_STRING("", 1);
@@ -462,12 +462,12 @@ PHP_METHOD(Sass, setMapPath)
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len) == FAILURE)
         RETURN_FALSE;
 
-    #if ZEND_MODULE_API_NO >= 20131226
-    sass_object *obj = (sass_object *)(uintptr_t)zend_object_store_get_object(this TSRMLS_CC);
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_object *obj = Z_MEMC_OBJ_P(this);
     #endif
-    #if ZEND_MODULE_API_NO < 20131226
+    #if ZEND_MODULE_API_NO <= 20131226
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
-    #endif 
+    #endif  
 
     if (obj->map_path != NULL)
         efree(obj->map_path);
@@ -485,12 +485,12 @@ PHP_METHOD(Sass, getPrecision)
         RETURN_FALSE;
     }
 
-    #if ZEND_MODULE_API_NO >= 20131226
-    sass_object *obj = (sass_object *)(uintptr_t)zend_object_store_get_object(this TSRMLS_CC);
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_object *obj = Z_MEMC_OBJ_P(this);
     #endif
-    #if ZEND_MODULE_API_NO < 20131226
+    #if ZEND_MODULE_API_NO <= 20131226
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
-    #endif 
+    #endif  
 
     RETURN_LONG(obj->precision);
 }
@@ -505,10 +505,10 @@ PHP_METHOD(Sass, setPrecision)
         RETURN_FALSE;
     }
 
-    #if ZEND_MODULE_API_NO >= 20131226
-    sass_object *obj = (sass_object *)(uintptr_t)zend_object_store_get_object(this TSRMLS_CC);
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_object *obj = Z_MEMC_OBJ_P(this);
     #endif
-    #if ZEND_MODULE_API_NO < 20131226
+    #if ZEND_MODULE_API_NO <= 20131226
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     #endif 
 
@@ -525,12 +525,12 @@ PHP_METHOD(Sass, getEmbed)
         RETURN_FALSE;
     }
 
-    #if ZEND_MODULE_API_NO >= 20131226
-    sass_object *obj = (sass_object *)(uintptr_t)zend_object_store_get_object(this TSRMLS_CC);
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_object *obj = Z_MEMC_OBJ_P(this);
     #endif
-    #if ZEND_MODULE_API_NO < 20131226
+    #if ZEND_MODULE_API_NO <= 20131226
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
-    #endif 
+    #endif  
 
     RETURN_LONG(obj->map_embed);
 }
@@ -545,12 +545,12 @@ PHP_METHOD(Sass, setEmbed)
         RETURN_FALSE;
     }
 
-    #if ZEND_MODULE_API_NO >= 20131226
-    sass_object *obj = (sass_object *)(uintptr_t)zend_object_store_get_object(this TSRMLS_CC);
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_object *obj = Z_MEMC_OBJ_P(this);
     #endif
-    #if ZEND_MODULE_API_NO < 20131226
+    #if ZEND_MODULE_API_NO <= 20131226
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
-    #endif 
+    #endif  
 
     obj->map_embed = new_map_embed;
 
@@ -566,10 +566,10 @@ PHP_METHOD(Sass, getComments)
         RETURN_FALSE;
     }
 
-    #if ZEND_MODULE_API_NO >= 20131226
-    sass_object *obj = (sass_object *)(uintptr_t)zend_object_store_get_object(this TSRMLS_CC);
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_object *obj = Z_MEMC_OBJ_P(this);
     #endif
-    #if ZEND_MODULE_API_NO < 20131226
+    #if ZEND_MODULE_API_NO <= 20131226
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     #endif 
 
@@ -586,12 +586,12 @@ PHP_METHOD(Sass, setComments)
         RETURN_FALSE;
     }
 
-    #if ZEND_MODULE_API_NO >= 20131226
-    sass_object *obj = (sass_object *)(uintptr_t)zend_object_store_get_object(this TSRMLS_CC);
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_object *obj = Z_MEMC_OBJ_P(this);
     #endif
-    #if ZEND_MODULE_API_NO < 20131226
+    #if ZEND_MODULE_API_NO <= 20131226
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
-    #endif 
+    #endif  
 
     obj->comments = new_comments;
 
@@ -607,10 +607,10 @@ PHP_METHOD(Sass, getIndent)
         RETURN_FALSE;
     }
 
-    #if ZEND_MODULE_API_NO >= 20131226
-    sass_object *obj = (sass_object *)(uintptr_t)zend_object_store_get_object(this TSRMLS_CC);
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_object *obj = Z_MEMC_OBJ_P(this);
     #endif
-    #if ZEND_MODULE_API_NO < 20131226
+    #if ZEND_MODULE_API_NO <= 20131226
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     #endif 
 
@@ -627,10 +627,10 @@ PHP_METHOD(Sass, setIndent)
         RETURN_FALSE;
     }
 
-    #if ZEND_MODULE_API_NO >= 20131226
-    sass_object *obj = (sass_object *)(uintptr_t)zend_object_store_get_object(this TSRMLS_CC);
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_object *obj = Z_MEMC_OBJ_P(this);
     #endif
-    #if ZEND_MODULE_API_NO < 20131226
+    #if ZEND_MODULE_API_NO <= 20131226
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     #endif 
 
