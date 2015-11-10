@@ -640,7 +640,7 @@ PHP_METHOD(Sass, setIndent)
     #if ZEND_MODULE_API_NO < 20131226
     sass_object *obj = (sass_object *)zend_object_store_get_object(this TSRMLS_CC);
     #endif 
-    
+
     obj->indent = new_indent;
 
     RETURN_NULL();
@@ -751,12 +751,19 @@ static PHP_MINIT_FUNCTION(sass)
 
     memcpy(&sass_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     #if ZEND_MODULE_API_NO > 20131226
-    sass_handlers.offset = XtOffsetOf(sass_ce, ce);
+    sass_handlers.offset = XtOffsetOf(sass_object, ce);
     #endif
     sass_handlers.clone_obj = NULL;
 
     INIT_CLASS_ENTRY(exception_ce, "SassException", NULL);
+
+    #if ZEND_MODULE_API_NO > 20131226
+    sass_exception_ce = zend_register_internal_class_ex(&exception_ce, sass_get_exception_base(TSRMLS_C));
+    #endif
+
+    #if ZEND_MODULE_API_NO <= 20131226
     sass_exception_ce = zend_register_internal_class_ex(&exception_ce, sass_get_exception_base(TSRMLS_C), NULL TSRMLS_CC);
+    #endif
 
     #define REGISTER_SASS_CLASS_CONST_LONG(name, value) zend_declare_class_constant_long(sass_ce, ZEND_STRS( #name ) - 1, value TSRMLS_CC)
 
