@@ -155,6 +155,9 @@ These extensions also utilise the [Libsass](https://github.com/hcatlin/libsass) 
 
 ## Changelog
 
+** Version 0.5.1
+*  Eleanor (Libsass 3.3.2) stable
+
 ** Version 0.5
 *  PHP 7 compatibility
 
