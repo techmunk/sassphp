@@ -4,7 +4,6 @@ php:
   - 5.5
   - 5.6
   - nightly
-cache: ccache
 
 env:
   global:
@@ -14,17 +13,13 @@ env:
     # Add the pip installation folder to the PATH, until https://github.com/travis-ci/travis-ci/issues/3563 is fixed
     - PATH=$HOME/.local/bin:$PATH
 
-addons:
-    code_climate:
-        repo_token: 5238e0804b03668ded6dad5dc40b8c274c038b97c2df34c3353e6fae8a1bbf10
-
 compiler:
   - gcc
 
 before_install:
   - echo $LANG
   - echo $LC_ALL
-  - composer require codeclimate/php-test-reporter --dev
+  - composer require satooshi/php-coveralls --dev
   - sudo apt-get update -qq
   - sudo apt-get install -y php5-dev
 #  - sudo apt-get install -y apache2
@@ -52,7 +47,7 @@ script:
   - make install
   - mkdir -p build/logs
   - make test
-  - phpunit -c phpunit.xml --coverage-clover build/logs/clover.xml
+  - php vendor/bin/phpunit -c phpunit.xml
 
 after_script:
   - php vendor/bin/coveralls -v
