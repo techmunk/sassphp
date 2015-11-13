@@ -35,8 +35,6 @@ before_install:
 before_script:
   - travis_retry composer self-update
   - composer config discard-changes true
-
-script:
   - make clean
   - cd lib/libsass && make && cd ../..
   - phpize
@@ -48,6 +46,9 @@ script:
 #  - mkdir -p build/logs
 #  - make test
 #  - phpunit --coverage-clover build/logs/clover.xml
+
+script:
+  - make test
 
 after_success:
 #  - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then php vendor/bin/coveralls -v; fi;'
