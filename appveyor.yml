@@ -2,7 +2,7 @@ environment:
    PHP_VERSION: 5.6.16
 
 os: 
-  - Visual Studio 2015
+  - Visual Studio 2012
 
 configuration: Release
 
