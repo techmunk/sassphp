@@ -9,6 +9,7 @@ addons:
   apt:
     packages:
       - php-5dev
+      - valgrind
 
 env:
   global:
