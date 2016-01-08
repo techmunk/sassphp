@@ -8,7 +8,6 @@ php:
 
 allow_failures:
     - php: nightly
-  fast_finish: true
 
 addons:
   apt:
