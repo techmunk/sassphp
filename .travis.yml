@@ -13,7 +13,7 @@ addons:
   apt:
     packages:
       - php-5dev
-      - valgrind
+      - gdb
 
 env:
   global:
@@ -36,6 +36,7 @@ before_install:
 before_script:
   - travis_retry composer self-update
   - composer config discard-changes true
+  - ulimit -c unlimited -S       # enable core dumps
 
 script:
   - make clean
@@ -53,6 +54,11 @@ script:
 notifications:
     on_success: never
     on_failure: never
+
+after_failure:
+- COREFILE=$(find . -maxdepth 1 -name "core*" | head -n 1) # find core file
+- if [[ -f "$COREFILE" ]]; then gdb -c "$COREFILE" example -ex "thread apply all bt" -ex "set pagination 0" -batch; fi
+
 
 os:
   - linux
