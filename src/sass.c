@@ -247,29 +247,13 @@ PHP_METHOD(Sass, compileFile)
     }
 
     // First, do a little checking of our own. Does the file exist?
-    #if ZEND_MODULE_API_NO <= 20131226
     if( access( file, F_OK ) == -1 )
     {
         zend_throw_exception_ex(sass_exception_ce, 0 TSRMLS_CC, "File %s could not be found", file);
         RETURN_FALSE;
     }
-    #endif
-     #if ZEND_MODULE_API_NO > 20131226
-    if( access( file->val, F_OK ) == -1 )
-    {
-        zend_throw_exception_ex(sass_exception_ce, 0 TSRMLS_CC, "File %s could not be found", file->val);
-        RETURN_FALSE;
-    }
-    #endif    
-    
-
-    // Create a new sass_file_context
-    #if ZEND_MODULE_API_NO <= 20131226
+  
     struct Sass_File_Context* file_ctx = sass_make_file_context(file);
-    #endif
-    #if ZEND_MODULE_API_NO > 20131226
-    struct Sass_File_Context* file_ctx = sass_make_file_context(file->val);
-    #endif
 
     struct Sass_Context* ctx = sass_file_context_get_context(file_ctx);
 
