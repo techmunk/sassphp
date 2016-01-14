@@ -150,8 +150,8 @@ If there's a problem, the extension will throw a `SassException`:
 
 These extensions also utilise the [Libsass](https://github.com/hcatlin/libsass) library & remain in varying states of completion:
 
-* Facebook [HHVM](https://github.com/absalomedia/sasshhvm) native (non Zend) extension - with Libsass 3.3.1 - stable - tested up to HHVM 3.10.x
-* [Nginx](https://github.com/absalomedia/sass-nginx-module) module - with Libsass 3.3.1 - unstable
+* Facebook [HHVM](https://github.com/absalomedia/sasshhvm) native (non Zend) extension - with Libsass 3.3.2 - tested up to HHVM 3.10.x
+* [Nginx](https://github.com/absalomedia/sass-nginx-module) module - with Libsass 3.3.2
 
 ## Changelog
 
