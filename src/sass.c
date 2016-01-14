@@ -173,28 +173,19 @@ PHP_METHOD(Sass, compile)
     sass_object *this = (sass_object *)zend_object_store_get_object(getThis() TSRMLS_CC);
     #endif
 
-    // We need a file name and a length
-    #if ZEND_MODULE_API_NO <= 20131226
     // Define our parameters as local variables
     char *source;
+    #if ZEND_MODULE_API_NO <= 20131226
     int source_len;
+    #endif
+    #if ZEND_MODULE_API_NO > 20131226
+    size_t source_len;
+    #endif
 
     // Use zend_parse_parameters() to grab our source from the function call
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &source, &source_len) == FAILURE){
         RETURN_FALSE;
     }
-    #endif
-
-    // We need a file name and a length
-    #if ZEND_MODULE_API_NO > 20131226
-    // Define our parameters as local variables
-    zend_string *source;
-
-    // Use zend_parse_parameters() to grab our source from the function call
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &source) == FAILURE){
-        RETURN_FALSE;
-    }
-    #endif
 
     // Create a new sass_context
     #if ZEND_MODULE_API_NO <= 20131226
@@ -247,27 +238,19 @@ PHP_METHOD(Sass, compileFile)
     #endif
 
     // We need a file name and a length
-    #if ZEND_MODULE_API_NO <= 20131226
     char *file;
+    #if ZEND_MODULE_API_NO <= 20131226
     int file_len;
+    #endif
+    #if ZEND_MODULE_API_NO > 20131226
+    size_t file_len;
+    #endif
 
     // Grab the file name from the function
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &file, &file_len) == FAILURE)
     {
         RETURN_FALSE;
     }
-    #endif
-
-    // We need a file name and a length
-    #if ZEND_MODULE_API_NO > 20131226
-    zend_string *file;
-
-    // Grab the file name from the function
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &file) == FAILURE)
-    {
-        RETURN_FALSE;
-    }
-    #endif
 
     // First, do a little checking of our own. Does the file exist?
     #if ZEND_MODULE_API_NO <= 20131226
