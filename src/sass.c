@@ -188,13 +188,7 @@ PHP_METHOD(Sass, compile)
     }
 
     // Create a new sass_context
-    #if ZEND_MODULE_API_NO <= 20131226
     struct Sass_Data_Context* data_context = sass_make_data_context(strdup(source));
-    #endif
-
-    #if ZEND_MODULE_API_NO > 20131226
-    struct Sass_Data_Context* data_context = sass_make_data_context(strdup(source->val));
-    #endif
 
     struct Sass_Context* ctx = sass_data_context_get_context(data_context);
 
