@@ -48,8 +48,13 @@ void sass_free_storage(void *object TSRMLS_DC)
     if (obj->map_root != NULL)
         efree(obj->map_root);
 
+#if ZEND_MODULE_API_NO <= 20131226
     zend_hash_destroy(obj->zo.properties);
     FREE_HASHTABLE(obj->zo.properties);
+#endif
+#if ZEND_MODULE_API_NO > 20131226
+    zend_object_std_dtor(obj->zo.properties);
+ #endif   
 
     efree(obj);
 }
@@ -80,17 +85,17 @@ zend_object_value sass_create_handler(zend_class_entry *type TSRMLS_DC) {
 
 #if ZEND_MODULE_API_NO > 20131226
 zend_object * sass_create_handler(zend_class_entry *type TSRMLS_DC) {
-    struct sass_object *intern = ecalloc(1, 
+    struct sass_object *obj = ecalloc(1, 
          sizeof(struct sass_object) + 
          zend_object_properties_size(type));
 
-     zend_object_std_init(&intern->zo, type TSRMLS_CC);
+     zend_object_std_init(&obj->zo, type TSRMLS_CC);
      sass_handlers.offset = XtOffsetOf(struct sass_object, zo);
      sass_handlers.free_obj = sass_free_storage;
  
-     intern->zo.handlers = &sass_handlers;
+     obj->zo.handlers = &sass_handlers;
  
-     return &intern->zo;
+     return &obj->zo;
 }
 
 static inline struct sass_object * php_custom_object_fetch_object(zend_object *obj) {
