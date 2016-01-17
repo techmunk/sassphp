@@ -53,7 +53,7 @@ void sass_free_storage(void *object TSRMLS_DC)
     FREE_HASHTABLE(obj->zo.properties);
 #endif
 #if ZEND_MODULE_API_NO > 20131226
-    zend_object_std_dtor(obj->zo.properties);
+    zend_object_std_dtor(obj);
  #endif   
 
     efree(obj);
