@@ -150,10 +150,13 @@ If there's a problem, the extension will throw a `SassException`:
 
 These extensions also utilise the [Libsass](https://github.com/hcatlin/libsass) library & remain in varying states of completion:
 
-* Facebook [HHVM](https://github.com/absalomedia/sasshhvm) native (non Zend) extension - with Libsass 3.3.2 - tested up to HHVM 3.10.x
-* [Nginx](https://github.com/absalomedia/sass-nginx-module) module - with Libsass 3.3.2
+* Facebook [HHVM](https://github.com/absalomedia/sasshhvm) native (non Zend) extension - with Libsass 3.3.3 - tested up to HHVM 3.11.x
+* [Nginx](https://github.com/absalomedia/sass-nginx-module) module - with Libsass 3.3.3
 
 ## Changelog
+
+** Version 0.5.2
+*  Delorean (Libsass 3.3.3) stable & PHP7 rewrite
 
 ** Version 0.5.1
 *  Eleanor (Libsass 3.3.2) stable
