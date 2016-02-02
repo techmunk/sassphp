@@ -4,6 +4,7 @@
  *
  * https://github.com/jamierumbelow/sassphp
  * Copyright (c)2012 Jamie Rumbelow <http://jamierumbelow.net>
+ * with work done by Philip Hofstetter & Lawrence Meckan
  */
 
 #ifndef PHP_SASS_H
@@ -14,7 +15,7 @@
 #endif
 
 #define SASS_VERSION "0.5.2"
-#define SASS_FLAVOR  "Sassyphpras"
+#define SASS_FLAVOR  "sensational"
 
 #include <php.h>
 #include <ext/standard/info.h>

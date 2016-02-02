@@ -14,7 +14,7 @@ For more information about Sass itself, please visit [http://sass-lang.com](http
 
 Currently, the only way to install the extension is manually:
 
-    $ git clone git://github.com/absalomedia/sassphp
+    $ git clone git://github.com/sensational/sassphp
 
 Remember to grab your submodules:
 
