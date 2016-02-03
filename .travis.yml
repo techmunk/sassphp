@@ -26,6 +26,11 @@ env:
 compiler:
   - gcc
 
+install:
+ # What is the current file size max for core files?
+ # It is usually 0, which means no core file will be dumped if there is a crash 
+ - ulimit -c
+
 before_install:
   - echo $LANG
   - echo $LC_ALL
@@ -49,15 +54,14 @@ script:
   - make install
   - mkdir -p build/logs
   - phpunit --coverage-clover build/logs/clover.xml
-  - make test
+  - make test || RESULT=$?
+  - if [[ ${RESULT} == 0 ]]; then echo "\\o/ our test worked without problems"; else echo "ruhroh test returned an errorcode of $RESULT"; fi;
+  - for i in $(find ./ -maxdepth 1 -name 'core*' -print); do gdb $(pwd)/test core* -ex "thread apply all bt" -ex "set pagination 0" -batch; done;
+  - if [[ ${RESULT} != 0 ]]; then exit $RESULT ; fi;
 
 notifications:
     on_success: never
     on_failure: never
-
-after_failure:
-- COREFILE=$(find . -maxdepth 1 -name "core*" | head -n 1) # find core file
-- if [[ -f "$COREFILE" ]]; then gdb -c "$COREFILE" example -ex "thread apply all bt" -ex "set pagination 0" -batch; fi
 
 
 os:
