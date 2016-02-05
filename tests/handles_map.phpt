@@ -15,4 +15,3 @@ file_put_contents(__DIR__.'test.css.map',$css[1]);
 ?>
 --EXPECT_EXTERNAL--
 test.css.map
-
