@@ -23,7 +23,9 @@
 zend_object_handlers sass_handlers;
 
 typedef struct sass_object {
+    #if PHP_MAJOR_VERSION < 7
     zend_object zo;
+    #endif
     int style;
     char* include_paths;
     bool comments;
@@ -34,6 +36,9 @@ typedef struct sass_object {
     bool map_embed;
     bool map_contents;
     char* map_root;
+    #if PHP_MAJOR_VERSION >= 7
+    zend_object zo;
+    #endif
 } sass_object;
 
 zend_class_entry *sass_ce;
@@ -65,7 +70,7 @@ void sass_free_storage(void *object TSRMLS_DC)
     FREE_HASHTABLE(obj->zo.properties);   
     efree(obj);
 }
-#endif
+#enfi
 
 
 #if ZEND_MODULE_API_NO <= 20131226
