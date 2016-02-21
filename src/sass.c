@@ -48,7 +48,7 @@ void sass_free_storage(void *object)
         efree(obj->map_path);
     if (obj->map_root != NULL)
         efree(obj->map_root);
-    zend_object_std_dtor(obj);
+    zend_object_std_dtor(obj->zo);
     efree(obj);
 }
 #else
@@ -65,7 +65,7 @@ void sass_free_storage(void *object TSRMLS_DC)
     FREE_HASHTABLE(obj->zo.properties);   
     efree(obj);
 }
-#endif
+
 
 #if ZEND_MODULE_API_NO <= 20131226
 zend_object_value sass_create_handler(zend_class_entry *type TSRMLS_DC) {
