@@ -38,6 +38,20 @@ typedef struct sass_object {
 
 zend_class_entry *sass_ce;
 
+#if PHP_MAJOR_VERSION >= 7
+void sass_free_storage(void *object)
+{
+    sass_object *obj = (sass_object *)object;
+    if (obj->include_paths != NULL)
+        efree(obj->include_paths);
+    if (obj->map_path != NULL)
+        efree(obj->map_path);
+    if (obj->map_root != NULL)
+        efree(obj->map_root);
+    zend_object_std_dtor(obj);
+    efree(obj);
+}
+#else
 void sass_free_storage(void *object TSRMLS_DC)
 {
     sass_object *obj = (sass_object *)object;
@@ -47,17 +61,11 @@ void sass_free_storage(void *object TSRMLS_DC)
         efree(obj->map_path);
     if (obj->map_root != NULL)
         efree(obj->map_root);
-
-#if ZEND_MODULE_API_NO <= 20131226
     zend_hash_destroy(obj->zo.properties);
-    FREE_HASHTABLE(obj->zo.properties);
-#endif
-#if ZEND_MODULE_API_NO > 20131226
-    zend_object_std_dtor(obj);
- #endif   
-
+    FREE_HASHTABLE(obj->zo.properties);   
     efree(obj);
 }
+#endif
 
 #if ZEND_MODULE_API_NO <= 20131226
 zend_object_value sass_create_handler(zend_class_entry *type TSRMLS_DC) {
