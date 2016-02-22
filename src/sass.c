@@ -5,7 +5,7 @@
  * https://github.com/jamierumbelow/sassphp
  * Copyright (c)2012 Jamie Rumbelow <http://jamierumbelow.net>
  *
- * Fork updated and maintained by https://github.com/pilif
+ * Fork updated and maintained by https://github.com/absalomedia
  */
 
 #include <stdio.h>
@@ -104,6 +104,8 @@ zend_object * sass_create_handler(zend_class_entry *type TSRMLS_DC) {
          zend_object_properties_size(type));
 
      zend_object_std_init(&obj->zo, type TSRMLS_CC);
+     obj->zo.handlers = &sass_handlers;
+ 
      return &obj->zo;
 }
 
