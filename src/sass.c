@@ -24,7 +24,7 @@ zend_object_handlers sass_handlers;
 
 typedef struct sass_object {
     #if PHP_MAJOR_VERSION < 7
-    struct zend_object zo;
+    zend_object zo;
     #endif
     int style;
     char* include_paths;
@@ -37,7 +37,7 @@ typedef struct sass_object {
     bool map_contents;
     char* map_root;
     #if PHP_MAJOR_VERSION >= 7
-    zend_object zo;
+    struct zend_object *zo;
     #endif
 } sass_object;
 
@@ -46,7 +46,7 @@ zend_class_entry *sass_ce;
 #if PHP_MAJOR_VERSION >= 7
 void sass_free_storage(void *object TSRMLS_DC)
 {
-    struct sass_object *obj = (sass_object *)object;
+    sass_object *obj = (sass_object *)object;
     if (obj->include_paths != NULL)
         efree(obj->include_paths);
     if (obj->map_path != NULL)
