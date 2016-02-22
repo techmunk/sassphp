@@ -54,7 +54,7 @@ static void sass_free_storage(void *object TSRMLS_DC)
     if (obj->map_root != NULL)
         efree(obj->map_root);
     zend_hash_destroy(obj->zo.properties);
-    zend_object_std_dtor(zo);
+    zend_object_std_dtor(&obj->zo);
     efree(obj);
 }
 #else
