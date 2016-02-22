@@ -44,16 +44,17 @@ typedef struct sass_object {
 zend_class_entry *sass_ce;
 
 #if PHP_MAJOR_VERSION >= 7
-void sass_free_storage(void *object)
+static void sass_free_object_storage(zend_object *zo)
 {
-    sass_object *obj = (sass_object *)object;
+    sass_object *obj = FETCH_CUSTOM_OBJ(zo,sass_object);
     if (obj->include_paths != NULL)
         efree(obj->include_paths);
     if (obj->map_path != NULL)
         efree(obj->map_path);
     if (obj->map_root != NULL)
         efree(obj->map_root);
-    zend_object_std_dtor(&obj->zo);
+    zend_hash_destroy(&obj->zo);
+    zend_object_std_dtor(zo);
     efree(obj);
 }
 #else
