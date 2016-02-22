@@ -44,7 +44,7 @@ typedef struct sass_object {
 zend_class_entry *sass_ce;
 
 #if PHP_MAJOR_VERSION >= 7
-static void sass_free_storage(void *object)
+void sass_free_storage(void *object)
 {
     sass_object *obj = (sass_object *)object;
     if (obj->include_paths != NULL)
@@ -105,7 +105,7 @@ zend_object * sass_create_handler(zend_class_entry *type TSRMLS_DC) {
 
      zend_object_std_init(&obj->zo, type TSRMLS_CC);
      sass_handlers.offset = XtOffsetOf(struct sass_object, zo);
-     sass_handlers.free_obj = sass_free_storage;
+     sass_handlers.free_obj = &sass_free_storage;
  
      obj->zo.handlers = &sass_handlers;
  
