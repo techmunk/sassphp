@@ -37,7 +37,7 @@ typedef struct sass_object {
     bool map_contents;
     char* map_root;
     #if PHP_MAJOR_VERSION >= 7
-    struct zend_object *zo;
+    zend_object zo;
     #endif
 } sass_object;
 
@@ -53,7 +53,7 @@ void sass_free_storage(void *object TSRMLS_DC)
         efree(obj->map_path);
     if (obj->map_root != NULL)
         efree(obj->map_root);
-    zend_object_std_dtor(obj->zo TSRMLS_CC);
+    zend_object_std_dtor(&obj->zo);
     efree(obj);
 }
 #else
