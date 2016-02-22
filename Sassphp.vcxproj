@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{DA0105A7-279B-4B5C-B8BC-39AABF5A2FBF}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SASSPHP_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SASSPHP_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="lib\libsass\ast.cpp" />
+    <ClCompile Include="lib\libsass\contextualize.cpp" />
+    <ClCompile Include="lib\libsass\contextualize_eval.cpp" />
+    <ClCompile Include="lib\libsass\contrib\plugin.cpp" />
+    <ClCompile Include="lib\libsass\error_handling.cpp" />
+    <ClCompile Include="lib\libsass\eval.cpp" />
+    <ClCompile Include="lib\libsass\expand.cpp" />
+    <ClCompile Include="lib\libsass\parser.cpp" />
+    <ClCompile Include="lib\libsass\posix\getopt.c" />
+    <ClCompile Include="lib\libsass\src\ast.cpp" />
+    <ClCompile Include="lib\libsass\src\base64vlq.cpp" />
+    <ClCompile Include="lib\libsass\src\bind.cpp" />
+    <ClCompile Include="lib\libsass\src\c99func.c" />
+    <ClCompile Include="lib\libsass\src\cencode.c" />
+    <ClCompile Include="lib\libsass\src\color_maps.cpp" />
+    <ClCompile Include="lib\libsass\src\constants.cpp" />
+    <ClCompile Include="lib\libsass\src\context.cpp" />
+    <ClCompile Include="lib\libsass\src\cssize.cpp" />
+    <ClCompile Include="lib\libsass\src\emitter.cpp" />
+    <ClCompile Include="lib\libsass\src\environment.cpp" />
+    <ClCompile Include="lib\libsass\src\error_handling.cpp" />
+    <ClCompile Include="lib\libsass\src\eval.cpp" />
+    <ClCompile Include="lib\libsass\src\expand.cpp" />
+    <ClCompile Include="lib\libsass\src\extend.cpp" />
+    <ClCompile Include="lib\libsass\src\file.cpp" />
+    <ClCompile Include="lib\libsass\src\functions.cpp" />
+    <ClCompile Include="lib\libsass\src\inspect.cpp" />
+    <ClCompile Include="lib\libsass\src\json.cpp" />
+    <ClCompile Include="lib\libsass\src\lexer.cpp" />
+    <ClCompile Include="lib\libsass\src\listize.cpp" />
+    <ClCompile Include="lib\libsass\src\memory_manager.cpp" />
+    <ClCompile Include="lib\libsass\src\node.cpp" />
+    <ClCompile Include="lib\libsass\src\output.cpp" />
+    <ClCompile Include="lib\libsass\src\parser.cpp" />
+    <ClCompile Include="lib\libsass\src\plugins.cpp" />
+    <ClCompile Include="lib\libsass\src\position.cpp" />
+    <ClCompile Include="lib\libsass\src\prelexer.cpp" />
+    <ClCompile Include="lib\libsass\src\remove_placeholders.cpp" />
+    <ClCompile Include="lib\libsass\src\sass.cpp" />
+    <ClCompile Include="lib\libsass\src\sass2scss.cpp" />
+    <ClCompile Include="lib\libsass\src\sass_context.cpp" />
+    <ClCompile Include="lib\libsass\src\sass_functions.cpp" />
+    <ClCompile Include="lib\libsass\src\sass_interface.cpp" />
+    <ClCompile Include="lib\libsass\src\sass_util.cpp" />
+    <ClCompile Include="lib\libsass\src\sass_values.cpp" />
+    <ClCompile Include="lib\libsass\src\source_map.cpp" />
+    <ClCompile Include="lib\libsass\src\to_c.cpp" />
+    <ClCompile Include="lib\libsass\src\to_string.cpp" />
+    <ClCompile Include="lib\libsass\src\to_value.cpp" />
+    <ClCompile Include="lib\libsass\src\units.cpp" />
+    <ClCompile Include="lib\libsass\src\utf8_string.cpp" />
+    <ClCompile Include="lib\libsass\src\util.cpp" />
+    <ClCompile Include="lib\libsass\src\values.cpp" />
+    <ClCompile Include="lib\libsass\test\test_node.cpp" />
+    <ClCompile Include="lib\libsass\test\test_paths.cpp" />
+    <ClCompile Include="lib\libsass\test\test_selector_difference.cpp" />
+    <ClCompile Include="lib\libsass\test\test_specificity.cpp" />
+    <ClCompile Include="lib\libsass\test\test_subset_map.cpp" />
+    <ClCompile Include="lib\libsass\test\test_superselector.cpp" />
+    <ClCompile Include="lib\libsass\test\test_unification.cpp" />
+    <ClCompile Include="lib\libsass\to_c.cpp" />
+    <ClCompile Include="lib\libsass\to_string.cpp" />
+    <ClCompile Include="src\sass.c" />
+    <ClCompile Include="src\utilities.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lib\libsass\ast_def_macros.hpp" />
+    <ClInclude Include="lib\libsass\ast_factory.hpp" />
+    <ClInclude Include="lib\libsass\color_names.hpp" />
+    <ClInclude Include="lib\libsass\context.hpp" />
+    <ClInclude Include="lib\libsass\contextualize.hpp" />
+    <ClInclude Include="lib\libsass\contextualize_eval.hpp" />
+    <ClInclude Include="lib\libsass\debugger.hpp" />
+    <ClInclude Include="lib\libsass\environment.hpp" />
+    <ClInclude Include="lib\libsass\error_handling.hpp" />
+    <ClInclude Include="lib\libsass\eval.hpp" />
+    <ClInclude Include="lib\libsass\include\sass.h" />
+    <ClInclude Include="lib\libsass\include\sass2scss.h" />
+    <ClInclude Include="lib\libsass\include\sass\base.h" />
+    <ClInclude Include="lib\libsass\include\sass\context.h" />
+    <ClInclude Include="lib\libsass\include\sass\functions.h" />
+    <ClInclude Include="lib\libsass\include\sass\interface.h" />
+    <ClInclude Include="lib\libsass\include\sass\values.h" />
+    <ClInclude Include="lib\libsass\include\sass\version.h" />
+    <ClInclude Include="lib\libsass\memory_manager.hpp" />
+    <ClInclude Include="lib\libsass\posix\getopt.h" />
+    <ClInclude Include="lib\libsass\src\ast.hpp" />
+    <ClInclude Include="lib\libsass\src\ast_def_macros.hpp" />
+    <ClInclude Include="lib\libsass\src\ast_factory.hpp" />
+    <ClInclude Include="lib\libsass\src\ast_fwd_decl.hpp" />
+    <ClInclude Include="lib\libsass\src\b64\cencode.h" />
+    <ClInclude Include="lib\libsass\src\b64\encode.h" />
+    <ClInclude Include="lib\libsass\src\backtrace.hpp" />
+    <ClInclude Include="lib\libsass\src\base64vlq.hpp" />
+    <ClInclude Include="lib\libsass\src\bind.hpp" />
+    <ClInclude Include="lib\libsass\src\color_maps.hpp" />
+    <ClInclude Include="lib\libsass\src\constants.hpp" />
+    <ClInclude Include="lib\libsass\src\context.hpp" />
+    <ClInclude Include="lib\libsass\src\cssize.hpp" />
+    <ClInclude Include="lib\libsass\src\debug.hpp" />
+    <ClInclude Include="lib\libsass\src\debugger.hpp" />
+    <ClInclude Include="lib\libsass\src\emitter.hpp" />
+    <ClInclude Include="lib\libsass\src\environment.hpp" />
+    <ClInclude Include="lib\libsass\src\error_handling.hpp" />
+    <ClInclude Include="lib\libsass\src\eval.hpp" />
+    <ClInclude Include="lib\libsass\src\expand.hpp" />
+    <ClInclude Include="lib\libsass\src\extend.hpp" />
+    <ClInclude Include="lib\libsass\src\file.hpp" />
+    <ClInclude Include="lib\libsass\src\functions.hpp" />
+    <ClInclude Include="lib\libsass\src\inspect.hpp" />
+    <ClInclude Include="lib\libsass\src\json.hpp" />
+    <ClInclude Include="lib\libsass\src\kwd_arg_macros.hpp" />
+    <ClInclude Include="lib\libsass\src\lexer.hpp" />
+    <ClInclude Include="lib\libsass\src\listize.hpp" />
+    <ClInclude Include="lib\libsass\src\mapping.hpp" />
+    <ClInclude Include="lib\libsass\src\memory_manager.hpp" />
+    <ClInclude Include="lib\libsass\src\node.hpp" />
+    <ClInclude Include="lib\libsass\src\operation.hpp" />
+    <ClInclude Include="lib\libsass\src\output.hpp" />
+    <ClInclude Include="lib\libsass\src\parser.hpp" />
+    <ClInclude Include="lib\libsass\src\paths.hpp" />
+    <ClInclude Include="lib\libsass\src\plugins.hpp" />
+    <ClInclude Include="lib\libsass\src\position.hpp" />
+    <ClInclude Include="lib\libsass\src\prelexer.hpp" />
+    <ClInclude Include="lib\libsass\src\remove_placeholders.hpp" />
+    <ClInclude Include="lib\libsass\src\sass_util.hpp" />
+    <ClInclude Include="lib\libsass\src\source_map.hpp" />
+    <ClInclude Include="lib\libsass\src\subset_map.hpp" />
+    <ClInclude Include="lib\libsass\src\to_c.hpp" />
+    <ClInclude Include="lib\libsass\src\to_string.hpp" />
+    <ClInclude Include="lib\libsass\src\to_value.hpp" />
+    <ClInclude Include="lib\libsass\src\units.hpp" />
+    <ClInclude Include="lib\libsass\src\utf8.h" />
+    <ClInclude Include="lib\libsass\src\utf8\checked.h" />
+    <ClInclude Include="lib\libsass\src\utf8\core.h" />
+    <ClInclude Include="lib\libsass\src\utf8\unchecked.h" />
+    <ClInclude Include="lib\libsass\src\utf8_string.hpp" />
+    <ClInclude Include="lib\libsass\src\util.hpp" />
+    <ClInclude Include="lib\libsass\src\values.hpp" />
+    <ClInclude Include="lib\libsass\to_c.hpp" />
+    <ClInclude Include="lib\libsass\util.hpp" />
+    <ClInclude Include="src\php_sass.h" />
+    <ClInclude Include="src\utilities.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="lib\libsass\res\resource.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
