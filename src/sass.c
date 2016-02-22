@@ -53,7 +53,7 @@ static void sass_free_storage(zend_object *zo)
         efree(obj->map_path);
     if (obj->map_root != NULL)
         efree(obj->map_root);
-    zend_hash_destroy(&obj->zo);
+    zend_hash_destroy(obj->zo.properties);
     zend_object_std_dtor(zo);
     efree(obj);
 }
