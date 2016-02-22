@@ -104,8 +104,10 @@ zend_object * sass_create_handler(zend_class_entry *type TSRMLS_DC) {
          zend_object_properties_size(type));
 
      zend_object_std_init(&obj->zo, type TSRMLS_CC);
+     object_properties_init(&obj->zo, type TSRMLS_CC);
+
      obj->zo.handlers = &sass_handlers;
- 
+
      return &obj->zo;
 }
 
@@ -728,7 +730,7 @@ static PHP_MINIT_FUNCTION(sass)
 
     memcpy(&sass_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     #if ZEND_MODULE_API_NO > 20131226
-    sass.handlers.free_obj = sass_free_storage;
+    sass_handlers.free_obj = sass_free_storage;
     sass_handlers.offset = XtOffsetOf(sass_object, zo);
     #endif
     sass_handlers.clone_obj = NULL;
