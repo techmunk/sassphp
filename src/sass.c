@@ -5,7 +5,7 @@
  * https://github.com/jamierumbelow/sassphp
  * Copyright (c)2012 Jamie Rumbelow <http://jamierumbelow.net>
  *
- * Fork updated and maintained by https://github.com/pilif
+ * Fork updated and maintained by https://github.com/absalomedia
  */
 
 #include <stdio.h>
@@ -23,7 +23,9 @@
 zend_object_handlers sass_handlers;
 
 typedef struct sass_object {
+    #if PHP_MAJOR_VERSION < 7
     zend_object zo;
+    #endif
     int style;
     char* include_paths;
     bool comments;
@@ -34,10 +36,28 @@ typedef struct sass_object {
     bool map_embed;
     bool map_contents;
     char* map_root;
+    #if PHP_MAJOR_VERSION >= 7
+    zend_object zo;
+    #endif
 } sass_object;
 
 zend_class_entry *sass_ce;
 
+#if PHP_MAJOR_VERSION >= 7
+static void sass_free_storage(zend_object *object)
+{
+    sass_object *obj = (sass_object *)object;
+    if (obj->include_paths != NULL)
+        efree(obj->include_paths);
+    if (obj->map_path != NULL)
+        efree(obj->map_path);
+    if (obj->map_root != NULL)
+        efree(obj->map_root);
+    zend_hash_destroy(obj->zo.properties);
+    zend_object_std_dtor(&obj->zo);
+    efree(obj);
+}
+#else
 void sass_free_storage(void *object TSRMLS_DC)
 {
     sass_object *obj = (sass_object *)object;
@@ -47,17 +67,12 @@ void sass_free_storage(void *object TSRMLS_DC)
         efree(obj->map_path);
     if (obj->map_root != NULL)
         efree(obj->map_root);
-
-#if ZEND_MODULE_API_NO <= 20131226
     zend_hash_destroy(obj->zo.properties);
-    FREE_HASHTABLE(obj->zo.properties);
-#endif
-#if ZEND_MODULE_API_NO > 20131226
-    zend_object_std_dtor(obj);
- #endif   
-
+    FREE_HASHTABLE(obj->zo.properties);   
     efree(obj);
 }
+#endif
+
 
 #if ZEND_MODULE_API_NO <= 20131226
 zend_object_value sass_create_handler(zend_class_entry *type TSRMLS_DC) {
@@ -90,11 +105,10 @@ zend_object * sass_create_handler(zend_class_entry *type TSRMLS_DC) {
          zend_object_properties_size(type));
 
      zend_object_std_init(&obj->zo, type TSRMLS_CC);
-     sass_handlers.offset = XtOffsetOf(struct sass_object, zo);
-     sass_handlers.free_obj = sass_free_storage;
- 
+     object_properties_init(&obj->zo, type TSRMLS_CC);
+
      obj->zo.handlers = &sass_handlers;
- 
+
      return &obj->zo;
 }
 
@@ -717,7 +731,8 @@ static PHP_MINIT_FUNCTION(sass)
 
     memcpy(&sass_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     #if ZEND_MODULE_API_NO > 20131226
-    sass_handlers.offset = XtOffsetOf(sass_object, zo);
+    sass_handlers.offset = XtOffsetOf(struct sass_object, zo);
+    sass_handlers.free_obj = sass_free_storage;
     #endif
     sass_handlers.clone_obj = NULL;
 
