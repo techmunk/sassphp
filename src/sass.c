@@ -394,7 +394,12 @@ PHP_METHOD(Sass, setIncludePath)
     zval *this = getThis();
 
     char *path;
+    #if ZEND_MODULE_API_NO <= 20131226
     int path_len;
+    #endif
+    #if ZEND_MODULE_API_NO > 20131226
+    size_t path_len;
+    #endif
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len) == FAILURE)
         RETURN_FALSE;
@@ -444,7 +449,12 @@ PHP_METHOD(Sass, setMapPath)
     zval *this = getThis();
 
     char *path;
+    #if ZEND_MODULE_API_NO <= 20131226
     int path_len;
+    #endif
+    #if ZEND_MODULE_API_NO > 20131226
+    size_t path_len;
+    #endif
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s", &path, &path_len) == FAILURE)
         RETURN_FALSE;
