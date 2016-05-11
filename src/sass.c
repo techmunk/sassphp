@@ -47,6 +47,7 @@ zend_class_entry *sass_ce;
 static void sass_free_storage(zend_object *object)
 {
     sass_object *obj = (sass_object *)object;
+    obj = (sass_object *)((char *)object - XoffsetOf(sass_object, zobj));
     if (obj->include_paths != NULL)
         efree(obj->include_paths);
     if (obj->map_path != NULL)
@@ -55,7 +56,6 @@ static void sass_free_storage(zend_object *object)
         efree(obj->map_root);
     zend_hash_destroy(obj->zo.properties);
     zend_object_std_dtor(&obj->zo);
-    efree(obj);
 }
 #else
 void sass_free_storage(void *object TSRMLS_DC)
