@@ -46,15 +46,17 @@ zend_class_entry *sass_ce;
 #if PHP_MAJOR_VERSION >= 7
 static void sass_free_storage(zend_object *object)
 {
-    sass_object obj = (sass_object *)object;
-    if (obj->include_paths != NULL)
-        efree(obj->include_paths);
-    if (obj->map_path != NULL)
-        efree(obj->map_path);
-    if (obj->map_root != NULL)
-        efree(obj->map_root);
+    sass_object *obj = FETCH_CUSTOM_OBJ(object, sass_object);
     zend_hash_destroy(obj->zo.properties);
     zend_object_std_dtor(&obj->zo);
+
+    if (obj->include_paths)
+        efree(obj->include_paths);
+    if (obj->map_path)
+        efree(obj->map_path);
+    if (obj->map_root)
+        efree(obj->map_root);
+
 }
 #else
 void sass_free_storage(void *object TSRMLS_DC)
