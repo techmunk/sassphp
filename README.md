@@ -2,7 +2,7 @@
 
 The `sass` extension for PHP gives you an object-oriented system of parsing [Sass](http://sass-lang.com/) from within your PHP applications. Under the hood it uses [libsass](https://github.com/hcatlin/libsass) to provide super speedy and compatible Sass parsing.
 
-![Libsass 3.3.4](https://img.shields.io/badge/libsass-3.3.4-yellow.svg) [![Build Status](https://travis-ci.org/absalomedia/sassphp.svg)](https://travis-ci.org/absalomedia/sassphp)
+![Libsass 3.3.6](https://img.shields.io/badge/libsass-3.3.6-yellow.svg) [![Build Status](https://travis-ci.org/absalomedia/sassphp.svg)](https://travis-ci.org/absalomedia/sassphp)
 
 ## What's Sass?
 
@@ -144,18 +144,20 @@ If there's a problem, the extension will throw a `SassException`:
         $css = FALSE;
     }
 
-## Potential / known issues
-
-* The file_comments test will fail as it remains unable to figure out the path the test has been run in. It generates the output successfully
-
 ## Variant builds
 
 These extensions also utilise the [Libsass](https://github.com/hcatlin/libsass) library & remain in varying states of completion:
 
-* Facebook [HHVM](https://github.com/absalomedia/sasshhvm) native (non Zend) extension - with Libsass 3.3.3 - tested up to HHVM 3.11.x
-* [Nginx](https://github.com/absalomedia/sass-nginx-module) module - with Libsass 3.3.3
+* Facebook [HHVM](https://github.com/absalomedia/sasshhvm) native (non Zend) extension - with Libsass 3.3.6 - tested up to HHVM 3.11.x
+* [Nginx](https://github.com/absalomedia/sass-nginx-module) module - with Libsass 3.3.6
 
 ## Changelog
+
+** Version 0.5.6
+*  Hancock - PHP5 & PHP7 stable build - All Travis builds passing
+
+** Version 0.5.5
+*  Herbie (Libsass 3.3.6) stable
 
 ** Version 0.5.2
 *  Delorean (Libsass 3.3.3) stable & PHP7 rewrite

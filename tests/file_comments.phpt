@@ -12,13 +12,13 @@ echo $css;
 
 
 ?>
---EXPECT--
+--EXPECTF--
 @import url(../blahblah/blah.blah);
-/* line 3, tests/support/test.scss */
+/* line 3, %s/support/test.scss */
 div {
   blah: "hello 4 world px bloo blah"; }
 
-/* line 9, tests/support/test.scss */
+/* line 9, %s/support/test.scss */
 div {
   blah: "foo iphone"; }
 
