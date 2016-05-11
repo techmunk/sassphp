@@ -44,10 +44,19 @@ typedef struct sass_object {
 zend_class_entry *sass_ce;
 
 #if PHP_MAJOR_VERSION >= 7
+
+static inline sass_object *sass_fetch_object(zend_object *obj)
+{
+    return (sass_object *) ((char*) (obj) - XtOffsetOf(sass_object, zo));
+}
+
+#define Z_SASS_P(zv) sass_fetch_object(Z_OBJ_P((zv)));
+
+
+
 static void sass_free_storage(zend_object *object)
 {
-    sass_object *obj = (sass_object *)object;
-    obj = (sass_object *)((char *)object - XoffsetOf(sass_object, zobj));
+    sass_object *obj = sass_fetch_object(object);
     zend_hash_destroy(obj->zo.properties);
     zend_object_std_dtor(&obj->zo);
 
