@@ -46,8 +46,7 @@ zend_class_entry *sass_ce;
 #if PHP_MAJOR_VERSION >= 7
 static void sass_free_storage(zend_object *object)
 {
-    sass_object *obj = (sass_object *)object;
-    obj = (sass_object *)((char *)object - XoffsetOf(sass_object, zobj));
+    sass_object obj = (sass_object *)object;
     if (obj->include_paths != NULL)
         efree(obj->include_paths);
     if (obj->map_path != NULL)
