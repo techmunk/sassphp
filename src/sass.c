@@ -52,20 +52,11 @@ static inline sass_object *sass_fetch_object(zend_object *obj)
 
 #define Z_SASS_P(zv) sass_fetch_object(Z_OBJ_P((zv)));
 
-
-
-static void sass_free_storage(zend_object *object)
+static void sass_free_storage(zend_object *object TSRMLS_DC)
 {
-    sass_object *obj = sass_fetch_object(object);
-    zend_hash_destroy(obj->zo.properties);
-    zend_object_std_dtor(&obj->zo);
-
-    if (obj->include_paths)
-        efree(obj->include_paths);
-    if (obj->map_path)
-        efree(obj->map_path);
-    if (obj->map_root)
-        efree(obj->map_root);
+    sass_object *obj;
+    obj = sass_fetch_object(object);
+    zend_object_std_dtor(object TSRMLS_DC);
 
 }
 #else
