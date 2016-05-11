@@ -114,12 +114,6 @@ zend_object * sass_create_handler(zend_class_entry *type TSRMLS_DC) {
      return &obj->zo;
 }
 
-static inline struct sass_object * php_custom_object_fetch_object(zend_object *obj) {
-      return (struct sass_object *)((char *)obj - XtOffsetOf(struct sass_object, zo));
-}
-
-#define Z_SASS_OBJ_P(zv) php_custom_object_fetch_object(Z_OBJ_P(zv));
-
 #endif
 
 
