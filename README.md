@@ -144,10 +144,6 @@ If there's a problem, the extension will throw a `SassException`:
         $css = FALSE;
     }
 
-## Potential / known issues
-
-* The file_comments test will fail as it remains unable to figure out the path the test has been run in. It generates the output successfully
-
 ## Variant builds
 
 These extensions also utilise the [Libsass](https://github.com/hcatlin/libsass) library & remain in varying states of completion:
@@ -156,6 +152,9 @@ These extensions also utilise the [Libsass](https://github.com/hcatlin/libsass) 
 * [Nginx](https://github.com/absalomedia/sass-nginx-module) module - with Libsass 3.3.6
 
 ## Changelog
+
+** Version 0.5.6
+*  Hancock - PHP5 & PHP7 stable build - All Travis builds passing
 
 ** Version 0.5.5
 *  Herbie (Libsass 3.3.6) stable
