@@ -15,6 +15,9 @@
         </testsuite>
    </testsuites>
     <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+             <directory suffix=".phpt">./tests/</directory>
+        </whitelist>
         <blacklist>
             <directory>./tests</directory>
             <directory>./vendor/</directory>

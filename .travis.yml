@@ -53,7 +53,7 @@ script:
   - export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/modules"
   - make install
   - mkdir -p build/logs
-  - phpunit --whitelist --coverage-clover build/logs/clover.xml
+  - phpunit --coverage-clover build/logs/clover.xml
   - make test || RESULT=$?
   - if [[ ${RESULT} == 0 ]]; then echo "\\o/ our test worked without problems"; else echo "ruhroh test returned an errorcode of $RESULT"; fi;
   - for i in $(find ./ -maxdepth 1 -name 'core*' -print); do gdb $(pwd)/test core* -ex "thread apply all bt" -ex "set pagination 0" -batch; done;
