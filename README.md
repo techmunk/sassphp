@@ -153,65 +153,25 @@ These extensions also utilise the [Libsass](https://github.com/hcatlin/libsass) 
 
 ## Changelog
 
-** Version 0.5.6
-*  Hancock - PHP5 & PHP7 stable build - All Travis builds passing
-
-** Version 0.5.5
-*  Herbie (Libsass 3.3.6) stable
-
-** Version 0.5.2
-*  Delorean (Libsass 3.3.3) stable & PHP7 rewrite
-
-** Version 0.5.1
-*  Eleanor (Libsass 3.3.2) stable
-
-** Version 0.5
-*  PHP 7 compatibility
-
-** Version 0.4.9
-* Too Fast To Furious (Libsass 3.3.1) stable
-
-** Version 0.4.8
-* Greased Lightning (Libsass 3.3.0) stable
-
-** Version 0.4.7
-* SCSS vs SASS detection - indents
-
-** Version 0.4.6
-* Travis experimental (unreleased)
-
-** Version 0.4.5
-* Holiday Patch (Libsass 3.2.5) stable
-
-** Version 0.4.4
-* Refactor correctly for LibSass 3.2.4
-
-** Version 0.4.2
-* CamelCase compile sequence
-
-** Version 0.4.1**
-* SOURCE_DEFAULT works & is documented
-* PHP test for SOURCE_DEFAULT (output unable to understand source directory in test, so functional pass, technical fail)
-* Revise other tests to pass as output varies on source negotiation.
-
-** Version 0.4**
-* Reconciled file compliation loop
-* Expand documentation
-* Addition of basic test for source comments
-* More work on compile sequence
-
-** Version 0.3.9**
-* Addition of source map url paths to SASS file compilation
-
-** Version 0.3.5**
-* Restructure of compile sequence (file only at this time) to account for source map output
-
-** Version 0.3.0**
-* Addition of source comments - none, inline, file. Set default to none.
-
-** Version 0.2.0**
-* Changed methods to be non-static
-* Allow setting include-path and image-path
-
-**Version 0.1.0 - IN DEVELOPMENT**
-* Initial release
+| Release | Description |
+| --- | --- |
+| 0.5.7 | Hancock -  Optimise loops & Travis. Simplify changelog documentation |
+| 0.5.6 | Green Giant - PHP5 & PHP7 stable build - All Travis builds passing |
+| 0.5.5 | Herbie (Libsass 3.3.6) stable |
+| 0.5.2 | Delorean (Libsass 3.3.3) stable & continuing PHP7 rewrite |
+| 0.5.1 | Eleanor (Libsass 3.3.2) stable |
+| 0.5.0 | Start of PHP 7 compatibility |
+| 0.4.9 | Too Fast To Furious (Libsass 3.3.1) stable |
+| 0.4.8 | Greased Lightning (Libsass 3.3.0) stable |
+| 0.4.7 | SCSS vs SASS detection - indents |
+| 0.4.6 | Travis experimental (unreleased) |
+| 0.4.5 | Holiday Patch (Libsass 3.2.5) stable |
+| 0.4.4 | Refactor correctly for LibSass 3.2.4 |
+| 0.4.2 | CamelCase compile sequence |
+| 0.4.1 | Addition of SOURCE_DEFAULT test & structure. Revise other tests |
+| 0.4.0 | Refactor file compliation. Basic tests for source comments. Expand documentation |
+| 0.3.9 | Addition of source map url paths to SASS file compilation |
+| 0.3.5 | Restructure of compile sequence (file only at this time) to account for source map output |
+| 0.3.0 | Addition of source comments - none, inline, file. Set default to none. |
+| 0.2.0 | Changed methods to be non-static. Allow setting include-path and image-path |
+| 0.1.0 | Initial release |
