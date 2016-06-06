@@ -1,42 +1,35 @@
-environment:
-   PHP_VERSION: 5.6.21
-
-configuration: Release
-
-version: '0.0.{build}'
-
-matrix:
-  fast_finish: true
-
+version: '{branch}.{build}'
 install:
-  - cd C:\projects\sassphp
-  - git submodule init
-  - git submodule update
-  - cd C:\
-  - mkdir php-src
-  - echo Preparing Windows build...
-  - echo Downloading PHP source code [%PHP_VERSION%]
-  - cd C:\php-src
-  - appveyor DownloadFile http://windows.php.net/downloads/releases/php-5.6.21-src.zip -FileName php-src.zip
-  - 7z x -y php-src.zip > nul
-  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64'
+- cmd: cinst wget
+- cmd: mkdir C:\projects\sassphp\bin
+- cmd: wget https://getcomposer.org/composer.phar -O C:\projects\sassphp\bin\composer.phar
+- git submodule init
+- git submodule update
 
 build_script:
-  - cd C:\php-src\php-5.6.21-src
-  - buildconf.bat --add-modules-dir=C:\projects
-  - configure --disable-all --enable-cli --enable-sass
-  - nmake php_sass.dll
-
-test: OFF
-
-test_script: OFF
-
-deploy: OFF
-
-notifications:
-  - on_build_success: false
-    on_build_failure: false
-    on_build_status_changed: false
-
+- cmd: >-
+    "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\vcvars32.bat"
+    wget http://windows.php.net/downloads/php-sdk/php-sdk-binary-tools-20110915.zip
+    7z x -y php-sdk-binary-tools-20110915.zip -oC:\projects\php-sdk
+    C:\projects\php-sdk\bin\phpsdk_setvars.bat
+    git clone https://github.com/php/php-src C:\projects\php-src
+    mkdir C:\projects\php-src\ext\ds
+    xcopy C:\projects\sassphp C:\projects\php-src\ext\ds /s /e /y
+    wget http://windows.php.net/downloads/php-sdk/deps-7.0-vc14-x86.7z
+    7z x -y deps-7.0-vc14-x86.7z -oC:\projects\php-src
+    cd C:\projects\php-src
+    buildconf.bat
+    configure.bat --disable-all --enable-phar --enable-json --enable-hash --enable-ctype --enable-filter --enable-tokenizer --enable-zip --with-iconv --with-openssl --with-dom --with-libxml --enable-cli --enable-zts --enable-ds=shared --with-config-file-scan-dir=C:\projects\sassphp\bin\modules.d --with-prefix=C:\projects\sassphp\bin --with-php-build=deps
+    nmake
+    nmake install
+    copy php.ini-development C:\projects\sassphp\bin\php.ini
+    mkdir C:\projects\sassphp\bin\modules.d
+    echo sassphp=sass.dll > C:\projects\sassphp\bin\modules.d\php.ini
+test_script:
+- cmd: cd C:\projects\sassphp
+- cmd: C:\projects\sassphp\bin\php.exe C:\projects\sassphp\bin\composer.phar install --prefer-source
+- cmd: C:\projects\sassphp\bin\php.exe vendor\phpunit\phpunit\phpunit -c vendor\php-ds\tests\phpunit.xml
 artifacts:
-  - path: ext\Release_TS\php_sass.dll
+  - path: bin
+    name: master
+    type: zip
