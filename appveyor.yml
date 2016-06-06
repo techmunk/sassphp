@@ -1,10 +1,11 @@
 version: '{branch}.{build}'
 install:
+- git submodule init
+- git submodule update
 - cmd: cinst wget
 - cmd: mkdir C:\projects\sassphp\bin
 - cmd: wget https://getcomposer.org/composer.phar -O C:\projects\sassphp\bin\composer.phar
-- git submodule init
-- git submodule update
+
 
 build_script:
 - cmd: >-
