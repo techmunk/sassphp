@@ -17,7 +17,7 @@ build_script:
 
     git clone https://github.com/php/php-src C:\projects\php-src
 
-    mkdir C:\projects\php-src\ext\ds
+    mkdir C:\projects\php-src\ext\sass
 
     xcopy C:\projects\sassphp C:\projects\php-src\ext\sass /s /e /y
 
@@ -43,7 +43,7 @@ build_script:
 test_script:
 - cmd: cd C:\projects\sassphp
 - cmd: C:\projects\sassphp\bin\php.exe C:\projects\sassphp\bin\composer.phar install --prefer-source
-- cmd: C:\projects\sassphp\bin\php.exe vendor\phpunit\phpunit\phpunit -c vendor\php-ds\tests\phpunit.xml
+- cmd: C:\projects\sassphp\bin\php.exe vendor\phpunit\phpunit\phpunit -c vendor\php-sass\tests\phpunit.xml
 artifacts:
   - path: bin
     name: master
