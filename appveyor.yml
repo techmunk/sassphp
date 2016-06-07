@@ -19,7 +19,7 @@ build_script:
 
     mkdir C:\projects\php-src\ext\ds
 
-    xcopy C:\projects\sassphp C:\projects\php-src\ext\ds /s /e /y
+    xcopy C:\projects\sassphp C:\projects\php-src\ext\sass /s /e /y
 
     wget http://windows.php.net/downloads/php-sdk/deps-7.0-vc14-x86.7z
 
