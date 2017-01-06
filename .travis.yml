@@ -13,7 +13,6 @@ addons:
   apt:
     packages:
       - php-5dev
-      - gdb
 
 env:
   global:
