@@ -14,7 +14,7 @@
 #include "config.h"
 #endif
 
-#define SASS_VERSION "0.5.6"
+#define SASS_VERSION "0.5.10"
 #define SASS_FLAVOR  "sensational"
 
 #include <php.h>

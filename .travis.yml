@@ -4,6 +4,7 @@ php:
   - 5.5
   - 5.6
   - 7.0
+  - 7.1
   - nightly
 
 allow_failures:
@@ -12,7 +13,7 @@ allow_failures:
 addons:
   apt:
     packages:
-      - php-5dev
+      - php5-dev
       - gdb
 
 env:
@@ -58,6 +59,9 @@ script:
   - if [[ ${RESULT} == 0 ]]; then echo "\\o/ our test worked without problems"; else echo "ruhroh test returned an errorcode of $RESULT"; fi;
   - for i in $(find ./ -maxdepth 1 -name 'core*' -print); do gdb $(pwd)/test core* -ex "thread apply all bt" -ex "set pagination 0" -batch; done;
   - if [[ ${RESULT} != 0 ]]; then exit $RESULT ; fi;
+
+after_success:
+  - travis_retry php vendor/bin/coveralls
 
 notifications:
     on_success: never
