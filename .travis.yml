@@ -13,7 +13,8 @@ allow_failures:
 addons:
   apt:
     packages:
-      - php-5dev
+      - php5-dev
+      - gdb
 
 env:
   global:
