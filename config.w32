@@ -1,70 +1,22 @@
-var SASS_EXT_NAME="sass";
-var SASS_EXT_DIR="lib/libsass/src";
-var SASS_EXT_API="/src/sass.c";
-var SASS_EXT_FLAGS="/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 /I" + configure_module_dirname;
+// vim:ft=javascript
 
-function sass_src(dir, files) {
-    return ADD_SOURCES(
-        SASS_EXT_DIR + dir,
-        files.join(" "),
-        SASS_EXT_NAME
-    );
-}
+ARG_ENABLE("sass", "whether to enable sass extension", "yes");
 
-////////////////////////////////////
-ARG_ENABLE("sass", "enable sass support", "no");
+ADD_FLAG('CFLAGS', ' /wd4005 /wd4267 /wd4244 ');
+ADD_FLAG('CFLAGS_BD_ZEND', ' /wd4018 /wd4101 /wd4090 /wd4273 ');
+ADD_FLAG('CFLAGS_BD_MAIN', ' /wd4018 /wd4090 ');
+ADD_FLAG('CFLAGS_BD_MAIN_STREAMS', ' /wd4013 ');
+DEFINE('RC', '$(RC) /nologo /d _USING_V110_SDK71_');
+ADD_FLAG('CFLAGS_BD_EXT_STANDARD', ' /wd4047 /wd4018 ');
+ADD_FLAG('CFLAGS_BD_SAPI_CLI', ' /wd4018 ');
 
-if (PHP_SASS != "no") {
-	EXTENSION(SASS_EXT_NAME, SASS_EXT_API, PHP_SASS_SHARED, SASS_EXT_FLAGS);
+if (PHP_SASS == "yes") {
+	CHECK_LIB("sass", ' + PROGRAM_FILES + '\\Apache Group\\Apache\\libexec', LIBSASS_SHARED_LIBADD);
+	LDFLAGS="-lsass /libpath:/lib/libsass/lib/";
+	EXTENSION("sass", "src/sass.c src/utilities.c", true);
 
-	ADD_SOURCE("/src/utilities.c");
-
-    sass_src("/",
-    [
-    	"c99func.c",
-    	"cencode.c",
-        "ast.cpp",
-        "base64vlq.cpp",
-        "bind.cpp",
-        "color_maps.cpp",
-        "constants.cpp",
-        "context.cpp",
-        "csssize.cpp",
-        "emitter.cpp",
-        "environment.cpp",
-        "error_handling.cpp",
-        "eval.cpp",
-        "expand.cpp",
-        "extend.cpp",
-        "file.cpp",
-        "functions.cpp",
-        "inspect.cpp",
-        "json.cpp",
-        "lexer.cpp",
-        "listize.cpp",
-        "memory_manager.cpp",
-        "node.cpp",
-        "output.cpp",
-        "parser.cpp",
-        "plugins.cpp",
-        "prelexer.cpp",
-        "position.cpp",
-        "sass.cpp",
-        "sass_context.cpp",
-        "sass_functions.cpp",
-        "sass_interface.cpp",
-        "sass_util.cpp",
-        "sass_values.cpp",
-        "sass2scss.cpp",
-        "source_map.cpp",
-        "to_c.cpp",
-        "to_string.cpp",
-        "to_value.cpp",
-        "units.cpp",
-        "utf8_string.cpp",
-        "util.cpp",
-        "values.cpp"
-
-    ]);
-
+	if ("x$sass_version" != "x") {
+		CFLAGS="-DLIBSASS_VERSION=\"\\\"$sass_version\\\"\" $CFLAGS";
+		CXXFLAGS="-DLIBSASS_VERSION=\"\\\"$sass_version\\\"\" $CXXFLAGS";
+	}
 }
