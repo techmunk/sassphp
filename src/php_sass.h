@@ -45,5 +45,6 @@ PHP_METHOD(Sass, getEmbed);
 PHP_METHOD(Sass, setEmbed);
 PHP_METHOD(Sass, getMapPath);
 PHP_METHOD(Sass, setMapPath);
+PHP_METHOD(Sass, setMapRoot);
 
 #endif
