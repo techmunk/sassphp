@@ -2,8 +2,9 @@
  * Sass
  * PHP bindings to libsass - fast, native Sass parsing in PHP!
  *
- * https://github.com/jamierumbelow/sassphp
+ * https://github.com/absalomedia/sassphp
  * Copyright (c)2012 Jamie Rumbelow <http://jamierumbelow.net>
+ * Copyright (c)2017 Lawrence Meckan <http://absalom.biz>
  */
 
 #ifndef PHP_SASS_H
@@ -13,7 +14,7 @@
 #include "config.h"
 #endif
 
-#define SASS_VERSION "0.5.10"
+#define SASS_VERSION "0.5.11"
 #define SASS_FLAVOR  "Sassyphpras"
 
 #include <php.h>
